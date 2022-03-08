@@ -1,0 +1,8 @@
+C:\Users\pc\Documents\GIT\Rentacar\RentACar\RentACar\obj\Debug\RentACar.csproj.AssemblyReference.cache
+C:\Users\pc\Documents\GIT\Rentacar\RentACar\RentACar\obj\Debug\RentACar.csproj.SuggestedBindingRedirects.cache
+C:\Users\pc\Documents\GIT\Rentacar\RentACar\RentACar\obj\Debug\RentACar.csproj.CoreCompileInputs.cache
+C:\Users\pc\Documents\GIT\Rentacar\RentACar\RentACar\bin\Debug\RentACar.exe.config
+C:\Users\pc\Documents\GIT\Rentacar\RentACar\RentACar\bin\Debug\RentACar.exe
+C:\Users\pc\Documents\GIT\Rentacar\RentACar\RentACar\bin\Debug\RentACar.pdb
+C:\Users\pc\Documents\GIT\Rentacar\RentACar\RentACar\obj\Debug\RentACar.exe
+C:\Users\pc\Documents\GIT\Rentacar\RentACar\RentACar\obj\Debug\RentACar.pdb

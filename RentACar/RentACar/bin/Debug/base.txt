@@ -1,0 +1,45 @@
+Audi A1 Carro Cinza Gasóleo 20€ 5 Manual
+Audi A1 Carro Preto Gasóleo 20€ 5 Manual
+Audi A1 Carro Branco Gasóleo 20€ 5 Manual
+BMW Serie 1 Carro Preto Gasolina 22€ 5 Manual
+BMW Serie 1 Carro Cinza Gasolina 22€ 5 Manual
+BMW Serie 2 Carro Preto Gasolina 24€ 5 Manual
+BMW Serie 2 Carro Cinza Gasolina 24€ 5 Manual
+Mazda CX-3 Carro Vermelho Gasóleo 18€ 5 Manual
+Mazda CX-3 Carro Vermelho Gasóleo 18€ 5 Manual
+Mazda CX-3 Carro Azul Gasóleo 18€ 5 Manual
+Mazda CX-3 Carro Azul Gasóleo 18€ 5 Manual
+Mazda CX-5 Carro Vermelho Gasóleo 20€ 5 Manual
+Mazda CX-5 Carro Vermelho Gasóleo 20€ 5 Manual
+Mazda CX-5 Carro Azul Gasóleo 20€ 5 Manual
+Porsche 911 Carro Cinza Gasolina 40€ 3 Automática
+Renault Clio Carro Branco Gasóleo 12€ 3 Manual
+Renault Clio Carro Branco Gasóleo 12€ 3 Manual
+Renault Clio Carro Preto Gasolina 10€ 5 Manual
+Renault Clio Carro Preto Gasolina 10€ 5 Manual
+Renault Megane Carro Vermelho Gasóleo 16€ 5 Manual
+Renault Megane Carro Azul Gasóleo 16€ 5 Manual
+Renault Megane Carro Preto Gasóleo 16€ 5 Manual
+Renault Megane Carro Cinza Gasóleo 16€ 5 Manual
+Renault Zoe Carro Branco Elétrico 25€ 3 Automática
+Renault Zoe Carro Branco Elétrico 25€ 3 Automática
+Renault Zoe Carro Branco Elétrico 25€ 3 Automática
+Toyota CH-R Carro Preto Híbrido 27€ 5 Automática
+Toyota CH-R Carro Cinza Híbrido 27€ 5 Automática
+Toyota Prius Carro Vermelho Híbrido 25€ 5 Automática
+Toyota Prius Carro Vermelho Híbrido 25€ 5 Automática
+Toyota Prius Carro Azul Híbrido 25€ 5 Automática
+Toyota Corolla Carro Preto Gasolina 15€ 5 Manual
+Seat Leon Carro Preto Gasóleo 17€ 3 Manual
+Seat Leon Carro Preto Gasóleo 17€ 3 Manual
+
+Honda CBR Mota Amarelo Gasolina 10€ 125cc
+Honda CBR Mota Amarelo Gasolina 10€ 125cc
+Kawasaki ZRX Mota Vermelho Gasolina 10€ 300cc
+Kawasaki ZRX Mota Vermelho Gasolina 10€ 300cc
+
+Irizar PB Camioneta Preto Gasóleo 100€ 3 150
+
+MAN Camião Preto Gasóleo 120€ 2000kg
+Mercedes Camião Preto Gasóleo 180€ 2500kg
+Scania Camião Preto Gasóleo 160€ 1750kg
