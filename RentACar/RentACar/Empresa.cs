@@ -95,24 +95,22 @@ namespace RentACar
                     }
                 }
             }
+            SimularAvarias(DateTime.Now);
         }
-        public int SimularAvarias(DateTime inicio)
+        public void SimularAvarias(DateTime inicio)
         {
             Random random = new Random();
             List<string> avarias = new List<string>
             {
                 "Avaria","Inspeção chumbada","Limpeza"
             };
-            int cnt = 0;
-            foreach (Veiculo v in Veiculos)
+            for (int i = 0; i < Veiculos.Count; i++)
             {
-                if(random.Next(0,99) <= 5)
+                if(random.Next(0,99) <= 20)
                 {
-                    v.AdicionarReserva(inicio, inicio.AddDays(random.Next(1, 7)), avarias[random.Next(0,2)]);
-                    cnt++;
+                    Veiculos[i].AdicionarReserva(inicio, inicio.AddDays(random.Next(1, 7)), avarias[random.Next(0,2)]);
                 }
             }
-            return cnt;
         }
     }
 }

@@ -21,5 +21,9 @@ namespace RentACar
             NPortas = nPortas;
             Caixa = caixa;
         }
+        public override string ToString()
+        {
+            return base.ToString() + $" | {NPortas.ToString().PadRight(9)} | {Caixa.PadRight(10)}";
+        }
     }
 }

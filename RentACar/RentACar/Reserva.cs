@@ -13,19 +13,11 @@ namespace RentACar
         private string _finalidade;
         public DateTime DataInicio { 
             get => _dataInicio;
-            set
-            {
-                if (value.CompareTo(DateTime.Now) >= 0)
-                    _dataInicio = value;
-            }
+            set => _dataInicio = value;
         }
         public DateTime DataFim { 
             get => _dataFim;
-            set
-            {
-                if (value.CompareTo(DateTime.Now) >= 0)
-                    _dataFim = value;
-            }
+            set => _dataFim = value;
         }
         public string Finalidade { get => _finalidade; set => _finalidade = value; }
 

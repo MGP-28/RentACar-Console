@@ -15,5 +15,14 @@ namespace RentACar
         public Camioneta(Veiculo v) : base(v)
         {
         }
+        public Camioneta(Veiculo v, int nEixos, int nPassageiros) : base(v)
+        {
+            NEixos = nEixos;
+            NPassageiros = nPassageiros;
+        }
+        public override string ToString()
+        {
+            return base.ToString() + $" | {NEixos.ToString().PadRight(8)} | {NPassageiros.ToString().PadRight(14)}";
+        }
     }
 }

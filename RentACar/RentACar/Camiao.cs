@@ -13,5 +13,13 @@ namespace RentACar
         public Camiao(Veiculo v) : base(v)
         {
         }
+        public Camiao(Veiculo v, double pesoMax) : base(v)
+        {
+            PesoMax = pesoMax;
+        }
+        public override string ToString()
+        {
+            return base.ToString() + $" | {PesoMax.ToString().PadRight(9)}";
+        }
     }
 }

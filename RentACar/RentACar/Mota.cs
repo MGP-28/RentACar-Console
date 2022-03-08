@@ -13,5 +13,13 @@ namespace RentACar
         public Mota(Veiculo v) : base(v)
         {
         }
+        public Mota(Veiculo v, int cilindrada) : base(v)
+        {
+            Cilindrada = cilindrada;
+        }
+        public override string ToString()
+        {
+            return base.ToString() + $" | {Cilindrada.ToString().PadRight(10)}";
+        }
     }
 }
