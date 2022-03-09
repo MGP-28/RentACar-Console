@@ -515,12 +515,61 @@ namespace RentACar
             DesenharDivisoria();
             Console.ReadKey();
         }
+        static List<Veiculo> VerificarManutencao(DateTime data, List<Veiculo> veiculos, ref List<string> motivos)
+        {
+            List<Veiculo> manutencao = new List<Veiculo>();
+            for (int i = 0; i < veiculos.Count; i++)
+            {
+                List<Reserva> reservas = veiculos[i].ListagemReservas();
+                foreach (Reserva reserva in reservas)
+                {
+                    if (data.DayOfYear >= reserva.DataInicio.DayOfYear && data.DayOfYear <= reserva.DataFim.DayOfYear && reserva.IsManutencao == true)
+                    { manutencao.Add(veiculos[i]); motivos.Add(reserva.Finalidade); break; }
+                }
+            }
+            return manutencao;
+        }
         static void VerVeículosManuntenção(ref Empresa empresa)
         {
-
+            List<string> motivos = new List<string>();
+            List<Veiculo> veiculos = VerificarManutencao(DateTime.Now, empresa.Veiculos, ref motivos);
+            Console.Clear();
+            DesenharTitulo("Veículos em manutenção");
+            DesenharLinha($"{"Tipo".PadRight(9)} | { "Nome".PadRight(14)} | {"Cor".PadRight(8)} | { "Combustivel".PadRight(8)} | { "Preco €"} | Motivo");
+            DesenharDivisoria();
+            for (int i = 0; i < veiculos.Count; i++)
+            {
+                string tipo = veiculos[i].GetType().ToString().Replace("RentACar.", "");
+                string info = veiculos[i].ToString().Remove(49);
+                DesenharLinha($"{tipo.PadRight(9)} | {info} | {motivos[i]}");
+            }
+            DesenharDivisoria();
+            Console.ReadKey();
+        }
+        static DateTime InserirData(string texto)
+        {
+            string s;
+            do
+            {
+                Console.Clear(); DesenharTitulo(texto); AlinharInput();
+                s = Console.ReadLine();
+            } while (!DateTime.TryParse(s, out _));
+            DateTime data = new DateTime(); data = DateTime.Parse(s);
+            return data;
         }
         static void SimularReserva(ref Empresa empresa)
         {
+            DateTime data = new DateTime(); bool pass = false;
+            do
+            {
+                Console.Clear();
+                data = InserirData("Insira data de inicio");
+                if (data.Year >= DateTime.Now.Year && data.DayOfYear >= DateTime.Now.DayOfYear) pass = true;
+            } while (!pass);
+            int op = InserirTipoVeiculo();
+            if (op == 0) return;
+
+            //AQUI
 
         }
         static void AlterarReserva(ref Empresa empresa)

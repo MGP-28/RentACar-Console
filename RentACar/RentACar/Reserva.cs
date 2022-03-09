@@ -11,6 +11,7 @@ namespace RentACar
         private DateTime _dataInicio;
         private DateTime _dataFim;
         private string _finalidade;
+        private bool _isManutencao;
         public DateTime DataInicio { 
             get => _dataInicio;
             set => _dataInicio = value;
@@ -20,12 +21,21 @@ namespace RentACar
             set => _dataFim = value;
         }
         public string Finalidade { get => _finalidade; set => _finalidade = value; }
+        public bool IsManutencao { get => _isManutencao; set => _isManutencao = value; }
 
         public Reserva(DateTime dataInicio, DateTime dataFim, string finalidade)
         {
             DataInicio = dataInicio;
             DataFim = dataFim;
             Finalidade = finalidade;
+            IsManutencao = false;
+        }
+        public Reserva(DateTime dataInicio, DateTime dataFim, string finalidade, bool isManutencao)
+        {
+            DataInicio = dataInicio;
+            DataFim = dataFim;
+            Finalidade = finalidade;
+            IsManutencao = isManutencao;
         }
     }
 }

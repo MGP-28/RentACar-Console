@@ -40,13 +40,18 @@ namespace RentACar
             Reserva r = new Reserva(dataInicio, dataFim, finalidade);
             Reservas.Add(r);
         }
+        public void AdicionarReserva(DateTime dataInicio, DateTime dataFim, string finalidade, bool isManutencao)
+        {
+            Reserva r = new Reserva(dataInicio, dataFim, finalidade, isManutencao);
+            Reservas.Add(r);
+        }
         public List<Reserva> ListagemReservas()
         {
             return Reservas;
         }
         public override string ToString()
         {
-            return $"{Nome.PadRight(14)} | {Cor.PadRight(8)} | {Combustivel.PadRight(11)} | {Preco.ToString(".00").PadRight(7)}";
+            return $"{Nome.PadRight(14)} | {Cor.PadRight(8)} | {Combustivel.PadRight(11)} | {Preco.ToString(".00").PadLeft(7)}";
         }
     }
 }

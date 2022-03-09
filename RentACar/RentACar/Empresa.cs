@@ -108,7 +108,7 @@ namespace RentACar
             {
                 if(random.Next(0,99) <= 20)
                 {
-                    Veiculos[i].AdicionarReserva(inicio, inicio.AddDays(random.Next(1, 7)), avarias[random.Next(0,2)]);
+                    Veiculos[i].AdicionarReserva(inicio, inicio.AddDays(random.Next(1, 7)), avarias[random.Next(0,2)], true);
                 }
             }
         }
