@@ -8,25 +8,30 @@ namespace RentACar
 {
     class Veiculo
     {
+        private int _id;
         private List<Reserva> _reservas = new List<Reserva>();
         private string _nome;
         private string _cor;
         private string _combustivel;
         private double _preco;
+        public int Id { get => _id; set => _id = value; }
         public string Nome { get => _nome; set => _nome = value; }
         public string Cor { get => _cor; set => _cor = value; }
         public string Combustivel { get => _combustivel; set => _combustivel = value; }
         public double Preco { get => _preco; set => _preco = value; }
         internal List<Reserva> Reservas { get => _reservas; set => _reservas = value; }
-        public Veiculo()
+        
+        public Veiculo(int id)
         {
+            Id = id;
         }
-        public Veiculo(string nome, string cor, string combustivel, double preco)
+        public Veiculo(int id, string nome, string cor, string combustivel, double preco)
         {
             Nome = nome;
             Cor = cor;
             Combustivel = combustivel;
             Preco = preco;
+            Id = id;
         }
         public Veiculo(Veiculo v)
         {
@@ -34,6 +39,7 @@ namespace RentACar
             this.Cor = v.Cor;
             this.Combustivel = v.Combustivel;
             this.Preco = v.Preco;
+            this.Id = v.Id;
         }
         public void AdicionarReserva(DateTime dataInicio, DateTime dataFim, string finalidade)
         {

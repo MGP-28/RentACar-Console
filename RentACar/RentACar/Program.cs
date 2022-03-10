@@ -20,7 +20,7 @@ namespace RentACar
         }
         static void DesenharLinha(string texto, int n)
         {
-            Console.WriteLine($" | {n} | {texto.PadRight(Console.WindowWidth - 10)} |");
+            Console.WriteLine($" | {n.ToString().PadLeft(3)} | {texto.PadRight(Console.WindowWidth - 12)} |");
         }
         static void DesenharDivisoria()
         {
@@ -31,7 +31,7 @@ namespace RentACar
         {
             List<string> opcoesMenu = new List<string>
             {
-            "Inserir novo veículo","Ver veículos disponíveis para aluguer",
+            "Inserir novo veículo","Ver veículos disponíveis no momento",
             "Ver veículos em manutenção","Simulador de reservas","Alterar reserva","Exportar informação para HTML",
             "Consultar ganhos"
             };
@@ -71,7 +71,7 @@ namespace RentACar
         }
         static bool VerifNum(int n, int min, int max)
         {
-            if (n > min && n < max)
+            if (n >= min && n <= max)
                 return true;
             return false;
         }
@@ -103,7 +103,7 @@ namespace RentACar
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.ReadKey(true);
         }
-        static void MostrarDadosConfirmacaoVeiculo(string nome, string cor, string combustivel,double preco)
+        static void MostrarDadosConfirmacaoInserirVeiculo(string nome, string cor, string combustivel,double preco)
         {
             Console.Clear();
             DesenharTitulo("Pretende confirmar os dados? (Sim / Não)");
@@ -111,6 +111,27 @@ namespace RentACar
             DesenharLinha("Cor: " + cor);
             DesenharLinha("Combustível: " + combustivel);
             DesenharLinha("Preço: " + preco.ToString(".00") + " €");
+        }
+        static bool ConfirmacaoReserva(Veiculo viatura, DateTime inico, DateTime fim)
+        {
+            do
+            {
+                string tipo = (viatura.GetType()).ToString().Replace("RentACar.", "");
+                Console.Clear();
+                DesenharTitulo("Pretende confirmar a reserva? (Sim / Não)");
+                DesenharLinha("Inicio: " + inico.ToShortDateString());
+                DesenharLinha("Inicio: " + fim.ToShortDateString());
+                DesenharLinha("Tipo: " + tipo);
+                DesenharLinha("Nome: " + viatura.Nome);
+                DesenharLinha("Cor: " + viatura.Cor);
+                DesenharLinha("Combustível: " + viatura.Combustivel);
+                DesenharLinha("Preço: " + viatura.Preco.ToString(".00") + " €");
+                DesenharDivisoria(); AlinharInput();
+                string confirmacao = Console.ReadLine();
+                if (confirmacao == "Não") return false;
+                else if (confirmacao != "Sim") { MensagemErro("Introduza 'Sim' ou 'Não' !"); }
+                else return true;
+            }while(true);
         }
         static int InserirTipoVeiculo()
         {
@@ -195,7 +216,7 @@ namespace RentACar
                     else { MensagemErro("Inválido > Apenas números são válidos"); pass = false; }
                 }
             } while (!pass);
-            Veiculo v = new Veiculo(nome,cor,combustivel,preco);
+            Veiculo v = new Veiculo(empresa.GetNextId(),nome,cor,combustivel,preco);
             switch (op)
             {
                 case 1:
@@ -240,7 +261,7 @@ namespace RentACar
                         string confirmacao = "";
                         do
                         {
-                            MostrarDadosConfirmacaoVeiculo(nome, cor, combustivel, preco);
+                            MostrarDadosConfirmacaoInserirVeiculo(nome, cor, combustivel, preco);
                             DesenharLinha("Nº Portas: " + nPortas);
                             DesenharLinha("Caixa: " + caixa);
                             DesenharDivisoria();
@@ -282,7 +303,7 @@ namespace RentACar
                         string confirmacao = "";
                         do
                         {
-                            MostrarDadosConfirmacaoVeiculo(nome, cor, combustivel, preco);
+                            MostrarDadosConfirmacaoInserirVeiculo(nome, cor, combustivel, preco);
                             DesenharLinha("Cilindrada: " + cilindrada);
                             DesenharDivisoria();
                             AlinharInput();
@@ -300,9 +321,7 @@ namespace RentACar
                         do
                         {
                             pass = true;
-                            Console.Clear();
-                            DesenharTitulo("Insira o número de eixos do veículo (0 para cancelar)");
-                            AlinharInput();
+                            Console.Clear();DesenharTitulo("Insira o número de eixos do veículo (0 para cancelar)");AlinharInput();
                             string s = Console.ReadLine();
                             if (!VerifString(s))
                             { pass = false; continue;
@@ -323,9 +342,7 @@ namespace RentACar
                         do
                         {
                             pass = true;
-                            Console.Clear();
-                            DesenharTitulo("Insira o número máximo de passageiros do veículo (0 para cancelar)");
-                            AlinharInput();
+                            Console.Clear();DesenharTitulo("Insira o número máximo de passageiros do veículo (0 para cancelar)");AlinharInput();
                             string s = Console.ReadLine();
                             if (!VerifString(s))
                             { pass = false; continue; }
@@ -347,11 +364,7 @@ namespace RentACar
                         string confirmacao = "";
                         do
                         {
-                            MostrarDadosConfirmacaoVeiculo(nome, cor, combustivel, preco);
-                            DesenharLinha("Nº Eixos: " + nEixos);
-                            DesenharLinha("Nº Passageiros: " + nPassageiros);
-                            DesenharDivisoria();
-                            AlinharInput();
+                            MostrarDadosConfirmacaoInserirVeiculo(nome, cor, combustivel, preco);DesenharLinha("Nº Eixos: " + nEixos);DesenharLinha("Nº Passageiros: " + nPassageiros);DesenharDivisoria(); AlinharInput();
                             pass = true;
                             confirmacao = Console.ReadLine();
                             if (confirmacao == "Não")
@@ -367,9 +380,7 @@ namespace RentACar
                         do
                         {
                             pass = true;
-                            Console.Clear();
-                            DesenharTitulo("Insira o peso máximo do veículo (0 para cancelar)");
-                            AlinharInput();
+                            Console.Clear();DesenharTitulo("Insira o peso máximo do veículo (0 para cancelar)");AlinharInput();
                             string s = Console.ReadLine();
                             if (!VerifString(s))
                             { pass = false; continue; }
@@ -391,10 +402,7 @@ namespace RentACar
                         string confirmacao = "";
                         do
                         {
-                            MostrarDadosConfirmacaoVeiculo(nome, cor, combustivel, preco);
-                            DesenharLinha("Peso máx.: " + pesoMax);
-                            DesenharDivisoria();
-                            AlinharInput();
+                            MostrarDadosConfirmacaoInserirVeiculo(nome, cor, combustivel, preco); DesenharLinha("Peso máx.: " + pesoMax); DesenharDivisoria(); AlinharInput();
                             pass = true;
                             confirmacao = Console.ReadLine();
                             if (confirmacao == "Não") return;
@@ -407,14 +415,14 @@ namespace RentACar
             DesenharTitulo("Veículo inserido com sucesso!");
             Console.ReadKey(true);
         }
-        static List<Veiculo> VeiculosPorClasse(ref Empresa empresa, int n)
+        static List<Veiculo> VeiculosPorClasse(List<Veiculo> veiculos, int n)
         {
             List<Veiculo> lista = new List<Veiculo>();
             switch (n)
             {
                 case 1:
                     {
-                        foreach (Veiculo veiculo in empresa.Veiculos)
+                        foreach (Veiculo veiculo in veiculos)
                         {
                             if (veiculo.GetType() == typeof(Carro))
                                 lista.Add(veiculo);
@@ -422,7 +430,7 @@ namespace RentACar
                     }
                 case 2:
                     {
-                        foreach (Veiculo veiculo in empresa.Veiculos)
+                        foreach (Veiculo veiculo in veiculos)
                         {
                             if (veiculo.GetType() == typeof(Mota))
                                 lista.Add(veiculo);
@@ -431,7 +439,7 @@ namespace RentACar
                     }
                 case 3:
                     {
-                        foreach (Veiculo veiculo in empresa.Veiculos)
+                        foreach (Veiculo veiculo in veiculos)
                         {
                             if (veiculo.GetType() == typeof(Camioneta))
                                 lista.Add(veiculo);
@@ -440,7 +448,7 @@ namespace RentACar
                     }
                 case 4:
                     {
-                        foreach (Veiculo veiculo in empresa.Veiculos)
+                        foreach (Veiculo veiculo in veiculos)
                         {
                             if (veiculo.GetType() == typeof(Camiao))
                                 lista.Add(veiculo);
@@ -466,54 +474,70 @@ namespace RentACar
             }
             return disponiveis;
         }
-        static void VerVeículosDisponíveis(ref Empresa empresa)
+        static List<Veiculo> VerificarDisponiveis(DateTime dataInicio, DateTime dataFim, List<Veiculo> veiculos)
         {
-            int op = InserirTipoVeiculo();
-            if (op == 0) return;
+            List<Veiculo> disponiveis = new List<Veiculo>();
+            for (int i = 0; i < veiculos.Count; i++)
+            {
+                bool isAvailable = true;
+                List<Reserva> reservas = veiculos[i].ListagemReservas();
+                foreach (Reserva reserva in reservas)
+                {
+                    if (dataInicio.CompareTo(reserva.DataInicio) < 0 && dataFim.CompareTo(reserva.DataInicio) >= 0 && dataFim.CompareTo(reserva.DataFim) <= 0 //Final na reserva
+                        || dataFim.CompareTo(reserva.DataFim) > 0 && dataInicio.CompareTo(reserva.DataInicio) >= 0 && dataInicio.CompareTo(reserva.DataFim) <= 0 //Inicio na reserva
+                        || dataInicio.CompareTo(reserva.DataInicio) < 0 && dataFim.CompareTo(reserva.DataFim) > 0 //Reserva a meio do intervalo
+                        || dataInicio.CompareTo(reserva.DataInicio) >= 0 && dataFim.CompareTo(reserva.DataFim) <= 0) //Reserva engloba o intervalo
+                    { isAvailable = false; break; }
+                }
+                if (isAvailable) disponiveis.Add(veiculos[i]);
+            }
+            return disponiveis;
+        }
+        static void VerVeiculosDisponiveis(List<Veiculo> baseVeiculos, int op, bool verification)
+        {
             List<Veiculo> veiculos = new List<Veiculo>();
-            Console.Clear();
-            string titulos = $"{ "Nome".PadRight(14)} | {"Cor".PadRight(8)} | { "Combustivel".PadRight(8)} | { "Preco €"}";
+            string titulos = $"{"".PadRight(3)} | {"Nome".PadRight(14)} | {"Cor".PadRight(8)} | { "Combustivel".PadRight(8)} | { "Preco €"}";
             switch (op)
             {
                 case 1:
                     {
-                        veiculos = VeiculosPorClasse(ref empresa, 1);
+                        veiculos = VeiculosPorClasse(baseVeiculos, 1);
                         DesenharTitulo("Carros disponíveis no presente dia");
                         DesenharLinha(titulos + $"{" | Nº Portas".ToString()} | {"Caixa".PadRight(10)}");
                         break;
                     }
                 case 2:
                     {
-                        veiculos = VeiculosPorClasse(ref empresa, 2);
+                        veiculos = VeiculosPorClasse(baseVeiculos, 2);
                         DesenharTitulo("Motas disponíveis no presente dia");
                         DesenharLinha(titulos + " | Cilindrada".PadRight(10));
                         break;
                     }
                 case 3:
                     {
-                        veiculos = VeiculosPorClasse(ref empresa, 3);
+                        veiculos = VeiculosPorClasse(baseVeiculos, 3);
                         DesenharTitulo("Camionetas disponíveis no presente dia");
                         DesenharLinha(titulos + $" | {"Nº Eixos".ToString()} | {"Nº Passageiros".ToString()}");
                         break;
                     }
                 case 4:
                     {
-                        veiculos = VeiculosPorClasse(ref empresa, 4);
+                        veiculos = VeiculosPorClasse(baseVeiculos, 4);
                         DesenharTitulo("Camiões disponíveis no presente dia");
                         DesenharLinha(titulos + " | Peso Max.");
                         break;
                     }
             }
-            List<Veiculo> disponiveis = VerificarDisponiveis(DateTime.Now, veiculos);
+            if(verification)
+                veiculos = VerificarDisponiveis(DateTime.Now, veiculos);
             DesenharDivisoria();
-            if (disponiveis.Count == 0)
+            if (veiculos.Count == 0)
                 DesenharLinha("Não existem veículos disponíveis!");
-            for (int i = 0; i < disponiveis.Count; i++)
+            for (int i = 0; i < veiculos.Count; i++)
             {
-                DesenharLinha(disponiveis[i].ToString());
+                DesenharLinha(veiculos[i].ToString(),i+1);
             }
             DesenharDivisoria();
-            Console.ReadKey();
         }
         static List<Veiculo> VerificarManutencao(DateTime data, List<Veiculo> veiculos, ref List<string> motivos)
         {
@@ -529,10 +553,10 @@ namespace RentACar
             }
             return manutencao;
         }
-        static void VerVeículosManuntenção(ref Empresa empresa)
+        static void VerVeículosManuntenção(List<Veiculo> baseVeiculos)
         {
             List<string> motivos = new List<string>();
-            List<Veiculo> veiculos = VerificarManutencao(DateTime.Now, empresa.Veiculos, ref motivos);
+            List<Veiculo> veiculos = VerificarManutencao(DateTime.Now, baseVeiculos, ref motivos);
             Console.Clear();
             DesenharTitulo("Veículos em manutenção");
             DesenharLinha($"{"Tipo".PadRight(9)} | { "Nome".PadRight(14)} | {"Cor".PadRight(8)} | { "Combustivel".PadRight(8)} | { "Preco €"} | Motivo");
@@ -546,35 +570,83 @@ namespace RentACar
             DesenharDivisoria();
             Console.ReadKey();
         }
-        static DateTime InserirData(string texto)
+        static DateTime VerifData(string input)
         {
-            string s;
-            do
+            DateTime data = new DateTime();
+            if(DateTime.TryParse(input, out _))
             {
-                Console.Clear(); DesenharTitulo(texto); AlinharInput();
-                s = Console.ReadLine();
-            } while (!DateTime.TryParse(s, out _));
-            DateTime data = new DateTime(); data = DateTime.Parse(s);
+                data = DateTime.Parse(input);
+            }
             return data;
         }
         static void SimularReserva(ref Empresa empresa)
         {
-            DateTime data = new DateTime(); bool pass = false;
+            DateTime dataInicio = new DateTime();
             do
             {
-                Console.Clear();
-                data = InserirData("Insira data de inicio");
-                if (data.Year >= DateTime.Now.Year && data.DayOfYear >= DateTime.Now.DayOfYear) pass = true;
-            } while (!pass);
-            int op = InserirTipoVeiculo();
-            if (op == 0) return;
-
-            //AQUI
+                Console.Clear(); DesenharTitulo("Insira data de inicio (+ para dia de hoje, 0 para cancelar)"); AlinharInput();
+                string s; dataInicio = DateTime.Now;
+                do
+                {
+                    s = Console.ReadLine();
+                } while (!VerifString(s));
+                if (s == "0")
+                    return;
+                else if (s != "+")
+                    dataInicio = VerifData(s);
+                if (dataInicio.CompareTo(DateTime.MinValue) != 0 && dataInicio.Year >= DateTime.Now.Year && dataInicio.DayOfYear >= DateTime.Now.DayOfYear) break;
+                else MensagemErro("Introduza uma data válida");
+            } while (true);
+            DateTime dataFim = new DateTime();
+            do
+            {
+                Console.Clear(); DesenharTitulo("Insira data de fim (+ para a mesma data de início, 0 para cancelar)"); AlinharInput();
+                string s; dataFim = dataInicio;
+                do
+                {
+                    s = Console.ReadLine();
+                } while (!VerifString(s));
+                if (s == "0")
+                    return;
+                else if (s != "+")
+                    dataFim = VerifData(s);
+                if (dataFim.CompareTo(DateTime.MinValue) != 0 && dataFim.Year >= dataInicio.Year && dataFim.DayOfYear >= dataInicio.DayOfYear) break;
+                else MensagemErro("Introduza uma data válida");
+            } while (true);
+            int tipoVeiculo = InserirTipoVeiculo();
+            if (tipoVeiculo == 0) return;
+            List<Veiculo> veiculos = VeiculosPorClasse(empresa.Veiculos, tipoVeiculo);
+            veiculos = VerificarDisponiveis(dataInicio, dataFim, veiculos);
+            do
+            {
+                int id;
+                do
+                {
+                    string s;
+                    do
+                    {
+                        Console.Clear(); DesenharTitulo($"Inicio: {dataInicio.ToShortDateString()} | Fim: {dataInicio.ToShortDateString()}"); VerVeiculosDisponiveis(veiculos, tipoVeiculo, false); DesenharLinha("Introduza o número correspondente à viatura para continuar (0 para cancelar)"); DesenharDivisoria(); AlinharInput(); 
+                        s = Console.ReadLine();
+                    } while (!VerifString(s) || !int.TryParse(s,out _));
+                    if (s == "0")
+                        return;
+                    id = int.Parse(s) - 1;
+                    if (VerifNum(id, 0, veiculos.Count)) break;
+                    else MensagemErro("Inválido!");
+                } while (true);
+                if (ConfirmacaoReserva(veiculos[id],dataInicio,dataFim))
+                {
+                    Console.Clear();DesenharTitulo("Pretende deixar anotação na reserva? ('Não' para avançar)");AlinharInput();
+                    string s = Console.ReadLine();
+                    empresa.Veiculos[veiculos[id].Id].AdicionarReserva(dataInicio,dataFim,"Reserva: " + s);
+                    break;
+                }
+            } while (true);
 
         }
         static void AlterarReserva(ref Empresa empresa)
         {
-
+            
         }
         static void ExportarHTML(ref Empresa empresa)
         {
@@ -605,9 +677,12 @@ namespace RentACar
                     case '1':
                         InserirNovoVeículo(ref empresa); break;
                     case '2':
-                        VerVeículosDisponíveis(ref empresa); break;
+                        {
+                            int classeVeiculo = InserirTipoVeiculo(); if (classeVeiculo == 0) return;
+                            Console.Clear(); VerVeiculosDisponiveis(empresa.Veiculos, classeVeiculo, true); Console.ReadKey(); break;
+                        }
                     case '3':
-                        VerVeículosManuntenção(ref empresa); break;
+                        VerVeículosManuntenção(empresa.Veiculos); break;
                     case '4':
                         SimularReserva(ref empresa); break;
                     case '5':

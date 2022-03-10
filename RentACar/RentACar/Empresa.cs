@@ -9,6 +9,7 @@ namespace RentACar
 {
     class Empresa
     {
+        private int id = -1;
         private List<string> _combustiveis = new List<string>()
         {
             "Gasóleo","Gasolina","Híbrido","Elétrico","GPL"
@@ -20,9 +21,15 @@ namespace RentACar
         internal List<string> Combustiveis { get => _combustiveis; set => _combustiveis = value; }
         internal List<string> Caixas { get => _caixas; set => _caixas = value; }
         internal List<Veiculo> Veiculos { get => _veiculos; set => _veiculos = value; }
+        private int Id { get => id; set => id = value; }
         public Empresa()
         {
             BuildDatabase();
+        }
+        public int GetNextId()
+        {
+            Id++;
+            return Id;
         }
         private void BuildDatabase()
         {
@@ -39,7 +46,7 @@ namespace RentACar
             {
                 if(line != "")
                 {
-                    Veiculo v = new Veiculo();
+                    Veiculo v = new Veiculo(GetNextId());
                     string line1 = line.Replace(searchClass, "!");
                     string[] split = line1.Split('!');
                     v.Nome = split[0].ToString();
@@ -102,14 +109,20 @@ namespace RentACar
             Random random = new Random();
             List<string> avarias = new List<string>
             {
-                "Avaria","Inspeção chumbada","Limpeza"
+                "Avaria","Inspeção chumbada"
             };
             for (int i = 0; i < Veiculos.Count; i++)
             {
-                if(random.Next(0,99) <= 20)
+                int rnd = random.Next(0,100);
+                if(rnd <= 9)
                 {
                     Veiculos[i].AdicionarReserva(inicio, inicio.AddDays(random.Next(1, 7)), avarias[random.Next(0,2)], true);
                 }
+                else if (rnd <= 29)
+                {
+                    Veiculos[i].AdicionarReserva(inicio, inicio.AddDays(1), "Limpeza", true);
+                }
+            
             }
         }
     }

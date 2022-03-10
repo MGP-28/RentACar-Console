@@ -13,3 +13,11 @@ D:\JP\OneDrive\OneDrive - ATEC - Academia de Formação\GIT\RentACar - Console\R
 D:\JP\OneDrive\OneDrive - ATEC - Academia de Formação\GIT\RentACar - Console\RentACar\RentACar\obj\Debug\RentACar.exe
 D:\JP\OneDrive\OneDrive - ATEC - Academia de Formação\GIT\RentACar - Console\RentACar\RentACar\obj\Debug\RentACar.pdb
 D:\JP\OneDrive\OneDrive - ATEC - Academia de Formação\GIT\RentACar - Console\RentACar\RentACar\obj\Debug\RentACar.csprojAssemblyReference.cache
+C:\Users\pc\Documents\GIT\RentACar-Console\RentACar\RentACar\bin\Debug\RentACar.exe.config
+C:\Users\pc\Documents\GIT\RentACar-Console\RentACar\RentACar\bin\Debug\RentACar.exe
+C:\Users\pc\Documents\GIT\RentACar-Console\RentACar\RentACar\bin\Debug\RentACar.pdb
+C:\Users\pc\Documents\GIT\RentACar-Console\RentACar\RentACar\obj\Debug\RentACar.csproj.AssemblyReference.cache
+C:\Users\pc\Documents\GIT\RentACar-Console\RentACar\RentACar\obj\Debug\RentACar.csproj.SuggestedBindingRedirects.cache
+C:\Users\pc\Documents\GIT\RentACar-Console\RentACar\RentACar\obj\Debug\RentACar.csproj.CoreCompileInputs.cache
+C:\Users\pc\Documents\GIT\RentACar-Console\RentACar\RentACar\obj\Debug\RentACar.exe
+C:\Users\pc\Documents\GIT\RentACar-Console\RentACar\RentACar\obj\Debug\RentACar.pdb
