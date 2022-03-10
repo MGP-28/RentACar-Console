@@ -33,7 +33,7 @@ namespace RentACar
             {
             "Inserir novo veículo","Ver veículos disponíveis no momento",
             "Ver veículos em manutenção","Simulador de reservas","Alterar reserva","Exportar informação para HTML",
-            "Consultar ganhos"
+            "Consultar ganhos","Clientes"
             };
             Console.WriteLine("");
             DesenharTitulo("Benvindo!");
@@ -54,12 +54,6 @@ namespace RentACar
         static bool VerifString(string s)
         {
             if (s.Count() < 1)
-                return false;
-            return true;
-        }
-        static bool VerifNum(int n)
-        {
-            if (n < 0)
                 return false;
             return true;
         }
@@ -112,25 +106,37 @@ namespace RentACar
             DesenharLinha("Combustível: " + combustivel);
             DesenharLinha("Preço: " + preco.ToString(".00") + " €");
         }
-        static bool ConfirmacaoReserva(Veiculo viatura, DateTime inico, DateTime fim)
+        static bool Confirmacao()
+        {
+            do
+            {
+                DesenharTitulo("Pretende confirmar a reserva? (Sim / Nao)");
+                AlinharInput();
+                string confirmacao = Console.ReadLine();
+                if (confirmacao == "Nao") return false;
+                else if (confirmacao != "Sim") { MensagemErro("Introduza 'Sim' ou 'Nao' !"); }
+                else return true;
+            } while (true);
+        }
+        static bool ConfirmacaoReserva(Veiculo viatura, DateTime inico, DateTime fim, Cliente cliente)
         {
             do
             {
                 string tipo = (viatura.GetType()).ToString().Replace("RentACar.", "");
                 Console.Clear();
-                DesenharTitulo("Pretende confirmar a reserva? (Sim / Não)");
+                DesenharLinha("Nome Cliente:" + cliente.Nome);
+                DesenharLinha("ID Cliente: " + cliente.Id);
                 DesenharLinha("Inicio: " + inico.ToShortDateString());
-                DesenharLinha("Inicio: " + fim.ToShortDateString());
+                DesenharLinha("Fim: " + fim.ToShortDateString());
                 DesenharLinha("Tipo: " + tipo);
-                DesenharLinha("Nome: " + viatura.Nome);
+                DesenharLinha("Marca/Modelo: " + viatura.Nome);
                 DesenharLinha("Cor: " + viatura.Cor);
                 DesenharLinha("Combustível: " + viatura.Combustivel);
                 DesenharLinha("Preço: " + viatura.Preco.ToString(".00") + " €");
-                DesenharDivisoria(); AlinharInput();
-                string confirmacao = Console.ReadLine();
-                if (confirmacao == "Não") return false;
-                else if (confirmacao != "Sim") { MensagemErro("Introduza 'Sim' ou 'Não' !"); }
-                else return true;
+                DesenharDivisoria();
+                if (Confirmacao())
+                    return true;
+                else return false;
             }while(true);
         }
         static int InserirTipoVeiculo()
@@ -547,7 +553,7 @@ namespace RentACar
                 List<Reserva> reservas = veiculos[i].ListagemReservas();
                 foreach (Reserva reserva in reservas)
                 {
-                    if (data.DayOfYear >= reserva.DataInicio.DayOfYear && data.DayOfYear <= reserva.DataFim.DayOfYear && reserva.IsManutencao == true)
+                    if (data.DayOfYear >= reserva.DataInicio.DayOfYear && data.DayOfYear <= reserva.DataFim.DayOfYear && reserva.IdCliente == 0)
                     { manutencao.Add(veiculos[i]); motivos.Add(reserva.Finalidade); break; }
                 }
             }
@@ -578,6 +584,39 @@ namespace RentACar
                 data = DateTime.Parse(input);
             }
             return data;
+        }
+        static bool VerifCliente(int n, List<Cliente> clientes)
+        {
+            for (int i = 0; i < clientes.Count; i++)
+            {
+                if (n == clientes[i].Id) return true;
+            }
+            return false;
+        }
+        static int CriarCliente(ref Empresa empresa)
+        {
+            string s;
+            do
+            {
+                Console.Clear(); DesenharTitulo("Introduza o nome do novo cliente:"); AlinharInput();
+                s = Console.ReadLine();
+                if (VerifString(s)) break;
+            } while (true);
+            empresa.AddCliente(s);
+            return empresa.Clientes.Last().Id;
+        }
+        static void ListarClientes(List<Cliente> clientes)
+        {
+            DesenharTitulo("Listagem de Clientes");
+            DesenharLinha($"{"ID".PadLeft(4)} | Nome");
+            DesenharDivisoria();
+            if (clientes.Count == 0)
+                DesenharLinha("Não existem clientes registados!");
+            for (int i = 0; i < clientes.Count; i++)
+            {
+                DesenharLinha(clientes[i].ToString());
+            }
+            DesenharDivisoria();
         }
         static void SimularReserva(ref Empresa empresa)
         {
@@ -619,10 +658,9 @@ namespace RentACar
             veiculos = VerificarDisponiveis(dataInicio, dataFim, veiculos);
             do
             {
-                int id;
+                int id; int cliente = -1; string s;
                 do
                 {
-                    string s;
                     do
                     {
                         Console.Clear(); DesenharTitulo($"Inicio: {dataInicio.ToShortDateString()} | Fim: {dataInicio.ToShortDateString()}"); VerVeiculosDisponiveis(veiculos, tipoVeiculo, false); DesenharLinha("Introduza o número correspondente à viatura para continuar (0 para cancelar)"); DesenharDivisoria(); AlinharInput(); 
@@ -634,11 +672,29 @@ namespace RentACar
                     if (VerifNum(id, 0, veiculos.Count)) break;
                     else MensagemErro("Inválido!");
                 } while (true);
-                if (ConfirmacaoReserva(veiculos[id],dataInicio,dataFim))
+                do
                 {
-                    Console.Clear();DesenharTitulo("Pretende deixar anotação na reserva? ('Não' para avançar)");AlinharInput();
-                    string s = Console.ReadLine();
-                    empresa.Veiculos[veiculos[id].Id].AdicionarReserva(dataInicio,dataFim,"Reserva: " + s);
+                    Console.Clear(); DesenharTitulo("Introduza o cliente (* para listagem, + para novo cliente, - para referência interna, 0 para cancelar)"); AlinharInput();
+                    s = Console.ReadLine();
+                    switch (s)
+                    {
+                        case "*": { Console.Clear(); ListarClientes(empresa.Clientes); Console.ReadKey(); break; }
+                        case "+": cliente = CriarCliente(ref empresa); break;
+                        case "-": cliente = 0; break;
+                        case "0": return;
+                        default: int.TryParse(s, out cliente); break;
+                    }
+                    if (cliente >= 0 && cliente <= empresa.Clientes.Last().Id) break;
+                    else if(s != "*") MensagemErro("Inválido");
+                } while (true);
+                if (ConfirmacaoReserva(veiculos[id],dataInicio,dataFim,empresa.Clientes[cliente]))
+                {
+                    Console.Clear(); DesenharTitulo("Anotaçao para a reserva (0 para cancelar)"); AlinharInput();
+                    s = Console.ReadLine();
+                    string anotacao = "";
+                    if (s == "0") return;
+                    else if(s != "") anotacao = $": {s}";
+                    empresa.Veiculos[veiculos[id].Id].AdicionarReserva(dataInicio,dataFim,"Reserva" + anotacao, cliente);
                     break;
                 }
             } while (true);
@@ -653,6 +709,10 @@ namespace RentACar
 
         }
         static void ConsultarGanhos(ref Empresa empresa)
+        {
+
+        }
+        static void ConsultarClientes(ref Empresa empresa)
         {
 
         }
@@ -691,6 +751,8 @@ namespace RentACar
                         ExportarHTML(ref empresa); break;
                     case '7':
                         ConsultarGanhos(ref empresa); break;
+                    case '8':
+                        ConsultarClientes(ref empresa); break;
                 }
             } while (loop);
         }

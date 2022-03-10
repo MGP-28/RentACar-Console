@@ -41,14 +41,9 @@ namespace RentACar
             this.Preco = v.Preco;
             this.Id = v.Id;
         }
-        public void AdicionarReserva(DateTime dataInicio, DateTime dataFim, string finalidade)
+        public void AdicionarReserva(DateTime dataInicio, DateTime dataFim, string finalidade, int id)
         {
-            Reserva r = new Reserva(dataInicio, dataFim, finalidade);
-            Reservas.Add(r);
-        }
-        public void AdicionarReserva(DateTime dataInicio, DateTime dataFim, string finalidade, bool isManutencao)
-        {
-            Reserva r = new Reserva(dataInicio, dataFim, finalidade, isManutencao);
+            Reserva r = new Reserva(dataInicio, dataFim, finalidade, id);
             Reservas.Add(r);
         }
         public List<Reserva> ListagemReservas()

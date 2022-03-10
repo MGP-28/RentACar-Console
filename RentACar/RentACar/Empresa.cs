@@ -9,7 +9,9 @@ namespace RentACar
 {
     class Empresa
     {
-        private int id = -1;
+        private int _id = -1;
+        private int _idCliente = -1;
+        private List<Cliente> _Clientes = new List<Cliente>();
         private List<string> _combustiveis = new List<string>()
         {
             "Gasóleo","Gasolina","Híbrido","Elétrico","GPL"
@@ -21,7 +23,9 @@ namespace RentACar
         internal List<string> Combustiveis { get => _combustiveis; set => _combustiveis = value; }
         internal List<string> Caixas { get => _caixas; set => _caixas = value; }
         internal List<Veiculo> Veiculos { get => _veiculos; set => _veiculos = value; }
-        private int Id { get => id; set => id = value; }
+        private int Id { get => _id; set => _id = value; }
+        private int IdCliente { get => _idCliente; set => _idCliente = value; }
+        internal List<Cliente> Clientes { get => _Clientes; set => _Clientes = value; }
         public Empresa()
         {
             BuildDatabase();
@@ -31,7 +35,18 @@ namespace RentACar
             Id++;
             return Id;
         }
+        private int GetNextClientId()
+        {
+            IdCliente++;
+            return IdCliente;
+        }
         private void BuildDatabase()
+        {
+            BuildClientes();
+            BuildCarros();
+            SimularAvarias(DateTime.Now);
+        }
+        public void BuildCarros()
         {
             StreamReader read = new StreamReader(@"base.txt");
             List<string> file = new List<string>();
@@ -40,11 +55,12 @@ namespace RentACar
                 file.Add(read.ReadLine());
             }
             file.Add("");
+            read.Close();
             int cnt = 0;
             string searchClass = " Carro ";
             foreach (string line in file)
             {
-                if(line != "")
+                if (line != "")
                 {
                     Veiculo v = new Veiculo(GetNextId());
                     string line1 = line.Replace(searchClass, "!");
@@ -102,7 +118,6 @@ namespace RentACar
                     }
                 }
             }
-            SimularAvarias(DateTime.Now);
         }
         public void SimularAvarias(DateTime inicio)
         {
@@ -113,17 +128,48 @@ namespace RentACar
             };
             for (int i = 0; i < Veiculos.Count; i++)
             {
-                int rnd = random.Next(0,100);
-                if(rnd <= 9)
+                int rnd = random.Next(0,150);
+                if(rnd <= 4)
                 {
-                    Veiculos[i].AdicionarReserva(inicio, inicio.AddDays(random.Next(1, 7)), avarias[random.Next(0,2)], true);
+                    Veiculos[i].AdicionarReserva(inicio, inicio.AddDays(random.Next(1, 7)), avarias[random.Next(0,2)], 0);
                 }
-                else if (rnd <= 29)
+                else if (rnd <= 19)
                 {
-                    Veiculos[i].AdicionarReserva(inicio, inicio.AddDays(1), "Limpeza", true);
+                    Veiculos[i].AdicionarReserva(inicio, inicio.AddDays(1), "Manutenção Regular", 0);
                 }
-            
+                else if (rnd <= 39)
+                {
+                    Veiculos[i].AdicionarReserva(inicio, inicio.AddDays(1), "Limpeza", 0);
+                }
             }
+        }
+        public void BuildClientes()
+        {
+            AddCliente("Referencia_Interna");
+            StreamReader read = new StreamReader(@"nomes.txt");
+            List<string> nomes = new List<string>();
+            List<string> apelidos = new List<string>();
+            while (true)
+            {
+                nomes.Add(read.ReadLine());
+                if (nomes.Last() == "") { nomes.RemoveAt(nomes.Count - 1); break; }
+            }
+            while (!read.EndOfStream)
+            {
+                apelidos.Add(read.ReadLine());
+            }
+            read.Close();
+            Random rnd = new Random();
+            for (int i = 0; i < 20; i++)
+            {
+                string nome = $"{nomes[rnd.Next(0, 26)]} {apelidos[rnd.Next(0, 26)]}";
+                AddCliente(nome);
+            }
+        }
+        public void AddCliente(string nome)
+        {
+            Cliente c = new Cliente(nome, GetNextClientId());
+            Clientes.Add(c);
         }
     }
 }
