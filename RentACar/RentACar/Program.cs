@@ -716,54 +716,34 @@ namespace RentACar
         }
         static void ExportarHTML(List<Veiculo> veiculos)
         {
-            if (File.Exists("veiculos.html")) { File.Delete("veiculos.html"); }
             StreamWriter write = new StreamWriter("@veiculos.html");
+            write.WriteLine("<table>");
             for (int i = 1; i <= 4; i++)
             {
                 List<Veiculo> veiculosClasse = VeiculosPorClasse(veiculos, i);
                 string classe = (veiculosClasse[0].GetType().ToString().Split('.'))[1];
-                write.WriteLine("<table>");
                 write.WriteLine($"<tr>{classe}</tr>");
-                write.WriteLine("<tr>");
-                write.WriteLine("<th>ID</th>");
-                write.WriteLine("<th>Marca/Modelo</th>");
-                write.WriteLine("<th>Combustível</th>");
-                write.WriteLine("<th>Preço</th>");
-                
-                // AQUI /////////////////////////////////////////////////////
-
+                write.Write("<tr><th>ID</th><th>Marca/Modelo</th><th>Combustível</th><th>Preço</th>");
                 switch (i)
                 {
                     case 1:
-                        {
-                            write.WriteLine("<th>Nº Portas</th>");
-                            write.WriteLine("<th>Caixa</th>"); break;
-                        }
+                        { write.Write("<th>Nº Portas</th><th>Caixa</th>"); break; }
                     case 2:
-                        {
-                            write.WriteLine("<th>Cilindrada</th>"); break;
-                        }
+                        { write.Write("<th>Cilindrada</th>"); break; }
                     case 3:
-                        {
-                            write.WriteLine("<th>Nº Eixos</th>");
-                            write.WriteLine("<th>Nº Passageiros</th>"); break;
-                        }
+                        { write.Write("<th>Nº Eixos</th><th>Nº Passageiros</th>"); break; }
                     case 4:
-                        {
-                            write.WriteLine("<th>Peso Máx.</th>"); break;
-                        }
+                        { write.Write("<th>Peso Máx.</th>"); break; }
                 }
-                write.WriteLine("</tr>");
-                for (int j = 0; j < veiculos.Count; j++)
+                write.Write("</tr>\n");
+                foreach (Veiculo v in veiculosClasse)
                 {
-                    write.WriteLine("<tr>");
-                    write.WriteLine($"<th>{veiculos[i].Id}</th>");
-                    write.WriteLine($"<th>{veiculos[i].Nome}</th>");
-                    write.WriteLine($"<th>{veiculos[i].Id}</th>");
-                    write.WriteLine($"<th>{veiculos[i].Nome}</th>");
-                    write.WriteLine("</tr>");
+                    write.Write($"<tr>{v.ToStringHTML()}</tr>");
                 }
+                
             }
+            write.WriteLine("</table>");
+            write.Close();
         }
         static void ConsultarGanhos(ref Empresa empresa)
         {
