@@ -54,5 +54,9 @@ namespace RentACar
         {
             return $"{Nome.PadRight(14)} | {Cor.PadRight(8)} | {Combustivel.PadRight(11)} | {Preco.ToString(".00").PadLeft(7)}";
         }
+        public string ToStringHTML()
+        {
+            return $"<th>{Nome}</th><th>{Cor}</th><th>{Combustivel}</th><th>{Preco.ToString(".00")}</th>";
+        }
     }
 }

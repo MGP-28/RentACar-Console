@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace RentACar
 {
@@ -588,9 +589,11 @@ namespace RentACar
             empresa.AddCliente(s);
             return empresa.Clientes.Last().Id;
         }
-        static void ListarClientes(List<Cliente> clientes)
+        static void ListarClientes(List<Cliente> clientes, bool porNome)
         {
-            DesenharTitulo("Listagem de Clientes");
+            string s = "nome";
+            if (porNome) { clientes = clientes.OrderBy(cliente => cliente.Nome).ToList(); s = "ID"; }
+            DesenharTitulo($"Listagem de Clientes (* para ordenar por {s})");
             DesenharLinha($"{"ID".PadLeft(4)} | Nome");
             DesenharDivisoria();
             if (clientes.Count == 0)
@@ -601,7 +604,6 @@ namespace RentACar
             }
             DesenharDivisoria();
         }
-        //Listar Clientes Ordem Alfabética
         static void SimularReserva(ref Empresa empresa)
         {
             DateTime dataInicio = new DateTime();
@@ -652,8 +654,13 @@ namespace RentACar
                 {
                     do
                     {
-                        Console.Clear(); DesenharTitulo($"Inicio: {dataInicio.ToShortDateString()} | Fim: {dataInicio.ToShortDateString()}"); VerVeiculosDisponiveis(veiculos, tipoVeiculo, false); DesenharLinha("Introduza o número correspondente à viatura para continuar (0 para cancelar)"); DesenharDivisoria(); AlinharInput(); 
+                        Console.Clear(); DesenharTitulo($"Inicio: {dataInicio.ToShortDateString()} | Fim: {dataInicio.ToShortDateString()}"); VerVeiculosDisponiveis(veiculos, tipoVeiculo, false); DesenharLinha("Introduza o número correspondente à viatura para continuar (N/B para avançar/recuar um dia, 0 para cancelar)"); DesenharDivisoria(); AlinharInput(); 
                         s = Console.ReadLine();
+                        if (s == "N" || s == "n") { dataInicio = dataInicio.AddDays(1); dataFim = dataFim.AddDays(1); }
+                        else if (s == "B" || s == "b") {
+                            if (dataInicio.CompareTo(DateTime.Now) > 0) { dataInicio = dataInicio.AddDays(-1); dataFim = dataFim.AddDays(-1); }
+                            else MensagemErro("Data de início de reserva já corresponde ao presente dia!"); 
+                        }
                     } while (!VerifString(s) || !int.TryParse(s,out _));
                     if (s == "0")
                         return;
@@ -667,7 +674,21 @@ namespace RentACar
                     s = Console.ReadLine();
                     switch (s)
                     {
-                        case "*": { Console.Clear(); ListarClientes(empresa.Clientes); Console.ReadKey(); break; }
+                        case "*":
+                            {
+                                bool order = false, flag = true;
+                                do
+                                {
+                                    Console.Clear(); ListarClientes(empresa.Clientes, order);
+                                    do
+                                    {
+                                        char key = Console.ReadKey().KeyChar;
+                                        if (key == '*') { order = !order; break; }
+                                        else if (key == 13) { flag = false; break; }
+                                    } while (true);
+                                } while (flag);
+                                break; 
+                            }
                         case "+": cliente = CriarCliente(ref empresa); break;
                         case "-": cliente = 0; break;
                         case "0": return;
@@ -688,15 +709,61 @@ namespace RentACar
                     break;
                 }
             } while (true);
-
         }
         static void AlterarReserva(ref Empresa empresa)
         {
             
         }
-        static void ExportarHTML(ref Empresa empresa)
+        static void ExportarHTML(List<Veiculo> veiculos)
         {
+            if (File.Exists("veiculos.html")) { File.Delete("veiculos.html"); }
+            StreamWriter write = new StreamWriter("@veiculos.html");
+            for (int i = 1; i <= 4; i++)
+            {
+                List<Veiculo> veiculosClasse = VeiculosPorClasse(veiculos, i);
+                string classe = (veiculosClasse[0].GetType().ToString().Split('.'))[1];
+                write.WriteLine("<table>");
+                write.WriteLine($"<tr>{classe}</tr>");
+                write.WriteLine("<tr>");
+                write.WriteLine("<th>ID</th>");
+                write.WriteLine("<th>Marca/Modelo</th>");
+                write.WriteLine("<th>Combustível</th>");
+                write.WriteLine("<th>Preço</th>");
+                
+                // AQUI /////////////////////////////////////////////////////
 
+                switch (i)
+                {
+                    case 1:
+                        {
+                            write.WriteLine("<th>Nº Portas</th>");
+                            write.WriteLine("<th>Caixa</th>"); break;
+                        }
+                    case 2:
+                        {
+                            write.WriteLine("<th>Cilindrada</th>"); break;
+                        }
+                    case 3:
+                        {
+                            write.WriteLine("<th>Nº Eixos</th>");
+                            write.WriteLine("<th>Nº Passageiros</th>"); break;
+                        }
+                    case 4:
+                        {
+                            write.WriteLine("<th>Peso Máx.</th>"); break;
+                        }
+                }
+                write.WriteLine("</tr>");
+                for (int j = 0; j < veiculos.Count; j++)
+                {
+                    write.WriteLine("<tr>");
+                    write.WriteLine($"<th>{veiculos[i].Id}</th>");
+                    write.WriteLine($"<th>{veiculos[i].Nome}</th>");
+                    write.WriteLine($"<th>{veiculos[i].Id}</th>");
+                    write.WriteLine($"<th>{veiculos[i].Nome}</th>");
+                    write.WriteLine("</tr>");
+                }
+            }
         }
         static void ConsultarGanhos(ref Empresa empresa)
         {
@@ -738,7 +805,7 @@ namespace RentACar
                     case '5':
                         AlterarReserva(ref empresa); break;
                     case '6':
-                        ExportarHTML(ref empresa); break;
+                        ExportarHTML(empresa.Veiculos); break;
                     case '7':
                         ConsultarGanhos(ref empresa); break;
                     case '8':

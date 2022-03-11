@@ -25,5 +25,9 @@ namespace RentACar
         {
             return base.ToString() + $" | {NPortas.ToString().PadRight(9)} | {Caixa.PadRight(10)}";
         }
+        public string ToStringHTML()
+        {
+            return base.ToString() + $"<th>{NPortas.ToString()}</th><th>{Caixa}</th>";
+        }
     }
 }

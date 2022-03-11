@@ -21,5 +21,9 @@ namespace RentACar
         {
             return base.ToString() + $" | {Cilindrada.ToString().PadRight(10)}";
         }
+        public string ToStringHTML()
+        {
+            return base.ToString() + $"<th>{Cilindrada.ToString()}</th>";
+        }
     }
 }

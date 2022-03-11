@@ -21,5 +21,9 @@ namespace RentACar
         {
             return base.ToString() + $" | {PesoMax.ToString().PadRight(9)}";
         }
+        public string ToStringHTML()
+        {
+            return base.ToString() + $"<th>{PesoMax.ToString()}</th>";
+        }
     }
 }

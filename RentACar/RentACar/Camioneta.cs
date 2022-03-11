@@ -24,5 +24,10 @@ namespace RentACar
         {
             return base.ToString() + $" | {NEixos.ToString().PadRight(8)} | {NPassageiros.ToString().PadRight(14)}";
         }
+        public string ToStringHTML()
+        {
+            return base.ToString() + $"<th>{NEixos.ToString()}</th><th>{NPassageiros.ToString()}</th>";
+        }
     }
+}
 }
