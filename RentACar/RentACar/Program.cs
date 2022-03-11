@@ -106,25 +106,14 @@ namespace RentACar
             DesenharLinha("Combustível: " + combustivel);
             DesenharLinha("Preço: " + preco.ToString(".00") + " €");
         }
-        static bool Confirmacao()
-        {
-            do
-            {
-                DesenharTitulo("Pretende confirmar a reserva? (Sim / Nao)");
-                AlinharInput();
-                string confirmacao = Console.ReadLine();
-                if (confirmacao == "Nao") return false;
-                else if (confirmacao != "Sim") { MensagemErro("Introduza 'Sim' ou 'Nao' !"); }
-                else return true;
-            } while (true);
-        }
         static bool ConfirmacaoReserva(Veiculo viatura, DateTime inico, DateTime fim, Cliente cliente)
         {
             do
             {
                 string tipo = (viatura.GetType()).ToString().Replace("RentACar.", "");
                 Console.Clear();
-                DesenharLinha("Nome Cliente:" + cliente.Nome);
+                DesenharTitulo("Confirmação de reserva");
+                DesenharLinha("Nome: " + cliente.Nome);
                 DesenharLinha("ID Cliente: " + cliente.Id);
                 DesenharLinha("Inicio: " + inico.ToShortDateString());
                 DesenharLinha("Fim: " + fim.ToShortDateString());
@@ -133,11 +122,13 @@ namespace RentACar
                 DesenharLinha("Cor: " + viatura.Cor);
                 DesenharLinha("Combustível: " + viatura.Combustivel);
                 DesenharLinha("Preço: " + viatura.Preco.ToString(".00") + " €");
-                DesenharDivisoria();
-                if (Confirmacao())
-                    return true;
-                else return false;
-            }while(true);
+                DesenharTitulo("Pretende confirmar a reserva? (Sim / Nao)");
+                AlinharInput();
+                string confirmacao = Console.ReadLine();
+                if (confirmacao == "Nao") return false;
+                else if (confirmacao != "Sim") { MensagemErro("Introduza 'Sim' ou 'Nao' !"); }
+                else return true;
+            } while(true);
         }
         static int InserirTipoVeiculo()
         {
@@ -585,14 +576,6 @@ namespace RentACar
             }
             return data;
         }
-        static bool VerifCliente(int n, List<Cliente> clientes)
-        {
-            for (int i = 0; i < clientes.Count; i++)
-            {
-                if (n == clientes[i].Id) return true;
-            }
-            return false;
-        }
         static int CriarCliente(ref Empresa empresa)
         {
             string s;
@@ -618,6 +601,7 @@ namespace RentACar
             }
             DesenharDivisoria();
         }
+        //Listar Clientes Ordem Alfabética
         static void SimularReserva(ref Empresa empresa)
         {
             DateTime dataInicio = new DateTime();
@@ -652,10 +636,15 @@ namespace RentACar
                 if (dataFim.CompareTo(DateTime.MinValue) != 0 && dataFim.Year >= dataInicio.Year && dataFim.DayOfYear >= dataInicio.DayOfYear) break;
                 else MensagemErro("Introduza uma data válida");
             } while (true);
-            int tipoVeiculo = InserirTipoVeiculo();
-            if (tipoVeiculo == 0) return;
-            List<Veiculo> veiculos = VeiculosPorClasse(empresa.Veiculos, tipoVeiculo);
-            veiculos = VerificarDisponiveis(dataInicio, dataFim, veiculos);
+            List<Veiculo> veiculos = new List<Veiculo>(); int tipoVeiculo;
+            do
+            {
+                tipoVeiculo = InserirTipoVeiculo();
+                if (tipoVeiculo == 0) return;
+                veiculos = VeiculosPorClasse(empresa.Veiculos, tipoVeiculo);
+                veiculos = VerificarDisponiveis(dataInicio, dataFim, veiculos);
+                if (veiculos.Count == 0) MensagemErro("Não existem viaturas disponíveis");
+            } while (veiculos.Count == 0);            
             do
             {
                 int id; int cliente = -1; string s;
@@ -693,8 +682,9 @@ namespace RentACar
                     s = Console.ReadLine();
                     string anotacao = "";
                     if (s == "0") return;
-                    else if(s != "") anotacao = $": {s}";
-                    empresa.Veiculos[veiculos[id].Id].AdicionarReserva(dataInicio,dataFim,"Reserva" + anotacao, cliente);
+                    else if (s != "" && cliente != 0) anotacao = $"Reserva: {s}";
+                    else anotacao = s;
+                    empresa.Veiculos[veiculos[id].Id].AdicionarReserva(dataInicio, dataFim, anotacao, cliente);
                     break;
                 }
             } while (true);
