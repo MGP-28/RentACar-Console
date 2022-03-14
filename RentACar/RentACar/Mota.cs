@@ -23,7 +23,7 @@ namespace RentACar
         }
         public string ToStringHTML()
         {
-            return base.ToString() + $"<th>{Cilindrada.ToString()}</th>";
+            return base.ToStringHTMLbase() + $"<th>{Cilindrada.ToString()}</th>";
         }
     }
 }

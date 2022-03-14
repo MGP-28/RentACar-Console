@@ -23,7 +23,7 @@ namespace RentACar
         }
         public string ToStringHTML()
         {
-            return base.ToString() + $"<th>{PesoMax.ToString()}</th>";
+            return base.ToStringHTMLbase() + $"<th>{PesoMax.ToString()}</th>";
         }
     }
 }

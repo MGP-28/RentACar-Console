@@ -26,7 +26,7 @@ namespace RentACar
         }
         public string ToStringHTML()
         {
-            return base.ToString() + $"<th>{NEixos.ToString()}</th><th>{NPassageiros.ToString()}</th>";
+            return base.ToStringHTMLbase() + $"<th>{NEixos.ToString()}</th><th>{NPassageiros.ToString()}</th>";
         }
     }
 }

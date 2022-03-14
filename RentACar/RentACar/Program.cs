@@ -712,17 +712,60 @@ namespace RentACar
         }
         static void AlterarReserva(ref Empresa empresa)
         {
-            
+            int idCliente = -1; string cliente = "", veiculo = ""; bool hasParameters = false;
+            DateTime dataInicio = new DateTime(), dataFim = new DateTime();
+            do
+            {
+                Console.Clear(); List<string> s = new List<string>();
+                if (hasParameters)
+                {
+                    DesenharTitulo("Informação inserida");
+                    if (idCliente != -1) s.Add($"Cliente nº: {idCliente}");
+                    if (cliente != "") s.Add($"Nome cliente: {cliente}");
+                    if (dataInicio.CompareTo(DateTime.MinValue) != 0) s.Add($"Data Inicio {dataInicio.ToShortDateString()}");
+                    if (dataFim.CompareTo(DateTime.MinValue) != 0) s.Add($"Data Fim {dataFim.ToShortDateString()}");
+                    if (veiculo != "") s.Add($"Veiculo: {veiculo}");
+                    foreach (string line in s)
+                    {
+                        DesenharLinha(line);
+                    }
+                    DesenharDivisoria();
+                }
+                DesenharTitulo("Escolha uma opção");
+                DesenharLinha("ID cliente", 1);
+                DesenharLinha("Nome cliente", 2);
+                DesenharLinha("Veiculo", 3);
+                DesenharLinha("Data Início", 4);
+                DesenharLinha("Data Fim", 5);
+                DesenharDivisoria();
+                DesenharLinha("Avançar com pesquisa",9);
+                DesenharDivisoria();
+                DesenharLinha("Sair", 0);
+                char key;
+                do
+                {
+                    key = Console.ReadKey().KeyChar;
+                } while (key < '0' || key > '5' && key != '9');
+                switch (key)
+                {
+                    case '0': return;
+                    case '1':
+                        {
+                            Console.Clear(); DesenharTitulo("Introduza o nome do cliente");
+                        }
+                }
+
+            } while (true);
         }
         static void ExportarHTML(List<Veiculo> veiculos)
         {
-            StreamWriter write = new StreamWriter("@veiculos.html");
-            write.WriteLine("<table>");
+            StreamWriter write = new StreamWriter("veiculos.html");
             for (int i = 1; i <= 4; i++)
             {
+                write.WriteLine("<table>");
                 List<Veiculo> veiculosClasse = VeiculosPorClasse(veiculos, i);
                 string classe = (veiculosClasse[0].GetType().ToString().Split('.'))[1];
-                write.WriteLine($"<tr>{classe}</tr>");
+                write.WriteLine($"<caption>{classe}</caption>");
                 write.Write("<tr><th>ID</th><th>Marca/Modelo</th><th>Combustível</th><th>Preço</th>");
                 switch (i)
                 {
@@ -738,11 +781,26 @@ namespace RentACar
                 write.Write("</tr>\n");
                 foreach (Veiculo v in veiculosClasse)
                 {
-                    write.Write($"<tr>{v.ToStringHTML()}</tr>");
+                    switch (i)
+                    {
+                        case 1:
+                            {   Carro c = (Carro)v;
+                                write.Write($"<tr>{c.ToStringHTML()}</tr>"); break; }
+                        case 2:
+                            {   Mota c = (Mota)v;
+                                write.Write($"<tr>{c.ToStringHTML()}</tr>"); break;
+                            }
+                        case 3:
+                            {   Camioneta c = (Camioneta)v;
+                                write.Write($"<tr>{c.ToStringHTML()}</tr>"); break;}
+                        case 4:
+                            {
+                                Camiao c = (Camiao)v;
+                                write.Write($"<tr>{c.ToStringHTML()}</tr>"); break;}
+                    }
                 }
-                
+                write.WriteLine("</table>");
             }
-            write.WriteLine("</table>");
             write.Close();
         }
         static void ConsultarGanhos(ref Empresa empresa)
