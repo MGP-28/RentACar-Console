@@ -20,12 +20,14 @@ namespace RentACar
             "Automático","Manual"
         };
         private List<Veiculo> _veiculos = new List<Veiculo>();
+        private List<Reserva> _reservas = new List<Reserva>();
         internal List<string> Combustiveis { get => _combustiveis; set => _combustiveis = value; }
         internal List<string> Caixas { get => _caixas; set => _caixas = value; }
         internal List<Veiculo> Veiculos { get => _veiculos; set => _veiculos = value; }
         private int Id { get => _id; set => _id = value; }
         private int IdCliente { get => _idCliente; set => _idCliente = value; }
         internal List<Cliente> Clientes { get => _Clientes; set => _Clientes = value; }
+        internal List<Reserva> Reservas { get => _reservas; set => _reservas = value; }
         public Empresa()
         {
             BuildDatabase();
@@ -119,6 +121,15 @@ namespace RentACar
                 }
             }
         }
+        public void AdicionarReserva(DateTime dataInicio, DateTime dataFim, string finalidade, int id, int idVeiculo)
+        {
+            Reserva r = new Reserva(dataInicio, dataFim, finalidade, id, idVeiculo);
+            Reservas.Add(r);
+        }
+        public List<Reserva> ListagemReservas()
+        {
+            return Reservas;
+        }
         public void SimularAvarias(DateTime inicio)
         {
             Random random = new Random();
@@ -131,15 +142,15 @@ namespace RentACar
                 int rnd = random.Next(0,150);
                 if(rnd <= 4)
                 {
-                    Veiculos[i].AdicionarReserva(inicio, inicio.AddDays(random.Next(1, 7)), avarias[random.Next(0,2)], 0);
+                    AdicionarReserva(inicio, inicio.AddDays(random.Next(1, 7)), avarias[random.Next(0, 2)], 0, Veiculos[i].Id);
                 }
                 else if (rnd <= 19)
                 {
-                    Veiculos[i].AdicionarReserva(inicio, inicio.AddDays(1), "Manutenção Regular", 0);
+                    AdicionarReserva(inicio, inicio.AddDays(1), "Manutenção Regular", 0, Veiculos[i].Id);
                 }
                 else if (rnd <= 39)
                 {
-                    Veiculos[i].AdicionarReserva(inicio, inicio.AddDays(1), "Limpeza", 0);
+                    AdicionarReserva(inicio, inicio.AddDays(1), "Limpeza", 0, Veiculos[i].Id);
                 }
             }
         }

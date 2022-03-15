@@ -9,7 +9,6 @@ namespace RentACar
     class Veiculo
     {
         private int _id;
-        private List<Reserva> _reservas = new List<Reserva>();
         private string _nome;
         private string _cor;
         private string _combustivel;
@@ -19,7 +18,6 @@ namespace RentACar
         public string Cor { get => _cor; set => _cor = value; }
         public string Combustivel { get => _combustivel; set => _combustivel = value; }
         public double Preco { get => _preco; set => _preco = value; }
-        internal List<Reserva> Reservas { get => _reservas; set => _reservas = value; }
         
         public Veiculo(int id)
         {
@@ -40,15 +38,6 @@ namespace RentACar
             this.Combustivel = v.Combustivel;
             this.Preco = v.Preco;
             this.Id = v.Id;
-        }
-        public void AdicionarReserva(DateTime dataInicio, DateTime dataFim, string finalidade, int id)
-        {
-            Reserva r = new Reserva(dataInicio, dataFim, finalidade, id);
-            Reservas.Add(r);
-        }
-        public List<Reserva> ListagemReservas()
-        {
-            return Reservas;
         }
         public override string ToString()
         {

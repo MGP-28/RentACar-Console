@@ -712,7 +712,7 @@ namespace RentACar
         }
         static void AlterarReserva(ref Empresa empresa)
         {
-            int idCliente = -1; string cliente = "", veiculo = ""; bool hasParameters = false;
+            int idCliente = -1, idVeiculo = -1; string cliente = "", veiculo = ""; bool hasParameters = false;
             DateTime dataInicio = new DateTime(), dataFim = new DateTime();
             do
             {
@@ -734,9 +734,10 @@ namespace RentACar
                 DesenharTitulo("Escolha uma opção");
                 DesenharLinha("ID cliente", 1);
                 DesenharLinha("Nome cliente", 2);
-                DesenharLinha("Veiculo", 3);
-                DesenharLinha("Data Início", 4);
-                DesenharLinha("Data Fim", 5);
+                DesenharLinha("ID veículo", 3);
+                DesenharLinha("Nome veiculo", 4);
+                DesenharLinha("Data Início", 5);
+                DesenharLinha("Data Fim", 6);
                 DesenharDivisoria();
                 DesenharLinha("Avançar com pesquisa",9);
                 DesenharDivisoria();
@@ -751,10 +752,120 @@ namespace RentACar
                     case '0': return;
                     case '1':
                         {
-                            Console.Clear(); DesenharTitulo("Introduza o nome do cliente");
+                            do {
+                                Console.Clear(); DesenharTitulo("Introduza o ID do cliente (* para listagem, 0 para cancelar)"); AlinharInput();
+                                string read = Console.ReadLine();
+                                if (read == "*")
+                                {
+                                    bool order = false, flag = true;
+                                    do
+                                    {
+                                        Console.Clear(); ListarClientes(empresa.Clientes, order);
+                                        do
+                                        {
+                                            char key1 = Console.ReadKey().KeyChar;
+                                            if (key1 == '*') { order = !order; break; }
+                                            else if (key1 == 13) { flag = false; break; }
+                                        } while (true);
+                                    } while (flag);
+                                }
+                                if (read == "0") break;
+                                else if (int.TryParse(read, out idCliente)) { hasParameters = true; break; }
+                                else MensagemErro("Inválido!");
+                            } while (true); 
+                            break;
+                        }
+                    case '2':
+                        {
+                            do
+                            {
+                                Console.Clear(); DesenharTitulo("Introduza o ID do cliente (* para listagem, 0 para cancelar)"); AlinharInput();
+                                string read = Console.ReadLine();
+                                if (read == "*")
+                                {
+                                    bool order = false, flag = true;
+                                    do
+                                    {
+                                        Console.Clear(); ListarClientes(empresa.Clientes, order);
+                                        do
+                                        {
+                                            char key1 = Console.ReadKey().KeyChar;
+                                            if (key1 == '*') { order = !order; break; }
+                                            else if (key1 == 13) { flag = false; break; }
+                                        } while (true);
+                                    } while (flag);
+                                }
+                                if (read == "0") break;
+                                else if (read != "") { cliente = read; hasParameters = true; break; }
+                                else MensagemErro("Inválido!");
+                            } while (true);
+                            break;
+                        }
+                    case '3':
+                        {
+                            do
+                            {
+                                Console.Clear(); DesenharTitulo("Introduza o ID do veiculo (0 para cancelar)"); AlinharInput();
+                                string read = Console.ReadLine();
+                                if (read == "0") break;
+                                else if (int.TryParse(read, out idCliente)) { hasParameters = true; break; }
+                                else MensagemErro("Inválido!");
+                            } while (true);
+                            break;
+                        }
+                    case '4':
+                        {
+                            Console.Clear(); DesenharTitulo("Introduza o nome do veículo (0 para cancelar)"); AlinharInput();
+                            string read = Console.ReadLine();
+                            if (read == "0") break;
+                            else { veiculo = read; hasParameters = true; break; }
+                        }
+                    case '5':
+                        {
+                            do
+                            {
+                                Console.Clear(); DesenharTitulo("Introduza a data inicial  (0 para cancelar)"); AlinharInput();
+                                string read = Console.ReadLine();
+                                if (read == "0") break;
+                                else if (DateTime.TryParse(read, out dataInicio)) { hasParameters = true; break; }
+                                else MensagemErro("Inválido");
+                            } while (true);
+                            break;
+                        }
+                    case '6':
+                        {
+                            do
+                            {
+                                Console.Clear(); DesenharTitulo("Introduza a data de fim  (0 para cancelar)"); AlinharInput();
+                                string read = Console.ReadLine();
+                                if (read == "0") break;
+                                else if (DateTime.TryParse(read, out dataFim)) { hasParameters = true; break; }
+                                else MensagemErro("Inválido");
+                            } while (true);
+                            break;
+                        }
+                    case '9':
+                        {
+                            if (idCliente == -1) //verificar cliente
+                            {
+                                int cnt = 0;
+                                foreach (Cliente c in empresa.Clientes)
+                                {
+                                    if (c.Nome.Contains(cliente)) { cnt++; idCliente = c.Id; }
+                                }
+                                if (cnt > 1) { MensagemErro("Mais do que um cliente encontrados com o nome inserido!"); break; }
+                            }
+                            if (idveiculo == -1) //verificar cliente
+                            {
+                                int cnt = 0;
+                                foreach (Cliente c in empresa.Clientes)
+                                {
+                                    if (c.Nome.Contains(cliente)) { cnt++; idCliente = c.Id; }
+                                }
+                                if (cnt > 1) { MensagemErro("Mais do que um cliente encontrados com o nome inserido!"); break; }
+                            }
                         }
                 }
-
             } while (true);
         }
         static void ExportarHTML(List<Veiculo> veiculos)
