@@ -21,3 +21,10 @@ C:\Users\pc\Documents\GIT\RentACar-Console\RentACar\RentACar\obj\Debug\RentACar.
 C:\Users\pc\Documents\GIT\RentACar-Console\RentACar\RentACar\obj\Debug\RentACar.csproj.CoreCompileInputs.cache
 C:\Users\pc\Documents\GIT\RentACar-Console\RentACar\RentACar\obj\Debug\RentACar.exe
 C:\Users\pc\Documents\GIT\RentACar-Console\RentACar\RentACar\obj\Debug\RentACar.pdb
+D:\T0121081\OneDrive\OneDrive - ATEC - Academia de Formação\GIT\RentACar - Console\RentACar\RentACar\bin\Debug\RentACar.exe.config
+D:\T0121081\OneDrive\OneDrive - ATEC - Academia de Formação\GIT\RentACar - Console\RentACar\RentACar\bin\Debug\RentACar.exe
+D:\T0121081\OneDrive\OneDrive - ATEC - Academia de Formação\GIT\RentACar - Console\RentACar\RentACar\bin\Debug\RentACar.pdb
+D:\T0121081\OneDrive\OneDrive - ATEC - Academia de Formação\GIT\RentACar - Console\RentACar\RentACar\obj\Debug\RentACar.csprojAssemblyReference.cache
+D:\T0121081\OneDrive\OneDrive - ATEC - Academia de Formação\GIT\RentACar - Console\RentACar\RentACar\obj\Debug\RentACar.csproj.CoreCompileInputs.cache
+D:\T0121081\OneDrive\OneDrive - ATEC - Academia de Formação\GIT\RentACar - Console\RentACar\RentACar\obj\Debug\RentACar.exe
+D:\T0121081\OneDrive\OneDrive - ATEC - Academia de Formação\GIT\RentACar - Console\RentACar\RentACar\obj\Debug\RentACar.pdb

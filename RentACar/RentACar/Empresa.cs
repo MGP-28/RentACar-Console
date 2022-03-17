@@ -139,7 +139,7 @@ namespace RentACar
             };
             for (int i = 0; i < Veiculos.Count; i++)
             {
-                int rnd = random.Next(0,150);
+                int rnd = random.Next(0,128);
                 if(rnd <= 4)
                 {
                     AdicionarReserva(inicio, inicio.AddDays(random.Next(1, 7)), avarias[random.Next(0, 2)], 0, Veiculos[i].Id);
