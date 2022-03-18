@@ -937,10 +937,10 @@ namespace RentACar
                                 if (isGeral) { Console.Clear(); DesenharTitulo("Procura total"); VerReservas(empresa.Reservas, true); }
                                 else { VerInformacaoInserida(s); List<Reserva> encontrados = ProcurarReservas(empresa.Reservas, idCliente, idVeiculo, dataInicio, dataFim); VerReservas(encontrados, true); }
                                 DesenharTitulo("* para listagem de clientes, - para listagem de veículos, 0 para sair");
-                                string keyVerReservas = Console.ReadKey().ToString();
+                                char keyVerReservas = Console.ReadKey(true).KeyChar;
                                 switch (keyVerReservas)
                                 {
-                                    /*case "*":
+                                    case '*':
                                         {
                                             bool order = false, flag = true;
                                             do
@@ -955,22 +955,9 @@ namespace RentACar
                                             } while (flag);
                                             break;
                                         }
-                                    case "-":
-                                        {
-                                            bool order = false, flag = true;
-                                            do
-                                            {
-                                                Console.Clear();
-                                                do
-                                                {
-                                                    char keyListagem = Console.ReadKey().KeyChar;
-                                                    if (keyListagem == '-') { order = !order; break; }
-                                                    else if (key == 13) { flag = false; break; }
-                                                } while (true);
-                                            } while (flag);
-                                            break;
-                                        }
-                                    case "0": { loop = false; break; }*/
+                                    case '-':
+                                        { Console.Clear(); VerTodosVeiculos(empresa.Veiculos); Console.ReadKey(); break; }
+                                    case '0': { loop = false; break; }
                                 }
                             } while (loop);
                             break;
