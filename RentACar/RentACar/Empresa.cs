@@ -9,8 +9,8 @@ namespace RentACar
 {
     class Empresa
     {
-        private int _id = -1;
-        private int _idCliente = -1;
+        private int _idVeiculo = 0;
+        private int _idCliente = 0;
         private List<Cliente> _Clientes = new List<Cliente>();
         private List<string> _combustiveis = new List<string>()
         {
@@ -24,7 +24,7 @@ namespace RentACar
         internal List<string> Combustiveis { get => _combustiveis; set => _combustiveis = value; }
         internal List<string> Caixas { get => _caixas; set => _caixas = value; }
         internal List<Veiculo> Veiculos { get => _veiculos; set => _veiculos = value; }
-        private int Id { get => _id; set => _id = value; }
+        private int IdVeiculo { get => _idVeiculo; set => _idVeiculo = value; }
         private int IdCliente { get => _idCliente; set => _idCliente = value; }
         internal List<Cliente> Clientes { get => _Clientes; set => _Clientes = value; }
         internal List<Reserva> Reservas { get => _reservas; set => _reservas = value; }
@@ -32,10 +32,10 @@ namespace RentACar
         {
             BuildDatabase();
         }
-        public int GetNextId()
+        public int GetNextIdVeiculo()
         {
-            Id++;
-            return Id;
+            IdVeiculo++;
+            return IdVeiculo;
         }
         private int GetNextClientId()
         {
@@ -64,7 +64,7 @@ namespace RentACar
             {
                 if (line != "")
                 {
-                    Veiculo v = new Veiculo(GetNextId());
+                    Veiculo v = new Veiculo(GetNextIdVeiculo());
                     string line1 = line.Replace(searchClass, "!");
                     string[] split = line1.Split('!');
                     v.Nome = split[0].ToString();
@@ -142,21 +142,22 @@ namespace RentACar
                 int rnd = random.Next(0,128);
                 if(rnd <= 4)
                 {
-                    AdicionarReserva(inicio, inicio.AddDays(random.Next(1, 7)), avarias[random.Next(0, 2)], 0, Veiculos[i].Id);
+                    AdicionarReserva(inicio, inicio.AddDays(random.Next(2, 7)), avarias[random.Next(0, 2)], 1337, Veiculos[i].Id);
                 }
-                else if (rnd <= 19)
+                else if (rnd <= 14)
                 {
-                    AdicionarReserva(inicio, inicio.AddDays(1), "Manutenção Regular", 0, Veiculos[i].Id);
+                    AdicionarReserva(inicio, inicio.AddDays(1), "Manutenção Regular", 1337, Veiculos[i].Id);
                 }
-                else if (rnd <= 39)
+                else if (rnd <= 49)
                 {
-                    AdicionarReserva(inicio, inicio.AddDays(1), "Limpeza", 0, Veiculos[i].Id);
+                    AdicionarReserva(inicio, inicio.AddDays(1), "Limpeza", 1337, Veiculos[i].Id);
                 }
             }
         }
         public void BuildClientes()
         {
-            AddCliente("Referencia_Interna");
+            Cliente c = new Cliente("Referencia_Interna", 1337);
+            Clientes.Add(c);
             StreamReader read = new StreamReader(@"nomes.txt");
             List<string> nomes = new List<string>();
             List<string> apelidos = new List<string>();
