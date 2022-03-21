@@ -716,18 +716,7 @@ namespace RentACar
                     {
                         case "*":
                             {
-                                bool order = false, flag = true;
-                                do
-                                {
-                                    Console.Clear(); ListarClientes(empresa.Clientes, order);
-                                    do
-                                    {
-                                        char key = Console.ReadKey().KeyChar;
-                                        if (key == '*') { order = !order; break; }
-                                        else if (key == 13) { flag = false; break; }
-                                    } while (true);
-                                } while (flag);
-                                break; 
+                                { ConsultarClientes(empresa.Clientes); break; }
                             }
                         case "+": { cliente = CriarCliente(ref empresa); break; }
                         case "-": { cliente = 0; break; }
@@ -842,17 +831,7 @@ namespace RentACar
                                 string read = Console.ReadLine();
                                 if (read == "*")
                                 {
-                                    bool order = false;
-                                    do
-                                    {
-                                        Console.Clear(); ListarClientes(empresa.Clientes, order);
-                                        do
-                                        {
-                                            char keyCliente = Console.ReadKey().KeyChar;
-                                            if (keyCliente == '*') { order = !order; break; }
-                                            else if (keyCliente == 13) { flag = false; break; }
-                                        } while (true);
-                                    } while (flag);
+                                    ConsultarClientes(empresa.Clientes);
                                 }
                                 if (read == "0") break;
                                 else if (int.TryParse(read, out idCliente))
@@ -942,18 +921,7 @@ namespace RentACar
                                 {
                                     case '*':
                                         {
-                                            bool order = false, flag = true;
-                                            do
-                                            {
-                                                Console.Clear(); ListarClientes(empresa.Clientes, order);
-                                                do
-                                                {
-                                                    char keyListagem = Console.ReadKey().KeyChar;
-                                                    if (keyListagem == '*') { order = !order; break; }
-                                                    else if (keyListagem == 13) { flag = false; break; }
-                                                } while (true);
-                                            } while (flag);
-                                            break;
+                                            { ConsultarClientes(empresa.Clientes); break; }
                                         }
                                     case '-':
                                         { Console.Clear(); VerTodosVeiculos(empresa.Veiculos); Console.ReadKey(); break; }
@@ -1010,14 +978,25 @@ namespace RentACar
                 write.WriteLine("</table>");
             }
             write.Close();
+            Console.Clear(); DesenharTitulo("Exportação para HTML concluida com sucesso!"); Console.ReadKey();
         }
         static void ConsultarGanhos(ref Empresa empresa)
         {
 
         }
-        static void ConsultarClientes(ref Empresa empresa)
+        static void ConsultarClientes(List<Cliente> clientes)
         {
-
+            bool order = false, loop = true;
+            do
+            {
+                Console.Clear(); ListarClientes(clientes, order);
+                do
+                {
+                    char keyCliente = Console.ReadKey().KeyChar;
+                    if (keyCliente == '*') { order = !order; break; }
+                    else if (keyCliente == 13) { loop = false; break; }
+                } while (true);
+            } while (loop);
         }
         static void Main(string[] args)
         {
@@ -1051,7 +1030,7 @@ namespace RentACar
                     case '5':
                         { VerVeiculosManuntenção(empresa); break; }
                     case '6':
-                        { ConsultarClientes(ref empresa); break; }
+                        { ConsultarClientes(empresa.Clientes); break; }
                     case '7':
                         { InserirNovoVeículo(ref empresa); break; }
                     case '8':

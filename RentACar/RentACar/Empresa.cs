@@ -142,15 +142,15 @@ namespace RentACar
                 int rnd = random.Next(0,128);
                 if(rnd <= 4)
                 {
-                    AdicionarReserva(inicio, inicio.AddDays(random.Next(2, 7)), avarias[random.Next(0, 2)], 1337, Veiculos[i].Id);
+                    AdicionarReserva(inicio.AddDays(random.Next(0, 7)), inicio.AddDays(random.Next(0, 10)), avarias[random.Next(0, 2)], Clientes[0].Id, Veiculos[i].Id);
                 }
                 else if (rnd <= 14)
                 {
-                    AdicionarReserva(inicio, inicio.AddDays(1), "Manutenção Regular", 1337, Veiculos[i].Id);
+                    AdicionarReserva(inicio, inicio.AddDays(random.Next(0, 2)), "Manutenção Regular", Clientes[0].Id, Veiculos[i].Id);
                 }
                 else if (rnd <= 49)
                 {
-                    AdicionarReserva(inicio, inicio.AddDays(1), "Limpeza", 1337, Veiculos[i].Id);
+                    AdicionarReserva(inicio, inicio.AddDays(1), "Limpeza", Clientes[0].Id, Veiculos[i].Id);
                 }
             }
         }
