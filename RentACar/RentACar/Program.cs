@@ -719,7 +719,7 @@ namespace RentACar
                                 { ConsultarClientes(empresa.Clientes); break; }
                             }
                         case "+": { cliente = CriarCliente(ref empresa); break; }
-                        case "-": { cliente = 0; break; }
+                        case "-": { cliente = 1337; break; }
                         case "0": return;
                         default: { int.TryParse(s, out cliente); break; }
                     }
@@ -992,7 +992,7 @@ namespace RentACar
                 Console.Clear(); DesenharTitulo("Consultar Ganhos");
                 DesenharLinha("Introduza a data inicial (0 para cancelar)"); DesenharDivisoria(); AlinharInput();
                 read = Console.ReadLine();
-                if (read == "0") break;
+                if (read == "0") return;
                 else if (DateTime.TryParse(read, out dataInicio)) { break; }
                 else MensagemErro("Inválido");
             } while (true);
@@ -1001,7 +1001,7 @@ namespace RentACar
                 Console.Clear(); DesenharTitulo("Consultar Ganhos"); DesenharLinha("Data incial: " + dataInicio.ToShortDateString());
                 DesenharLinha("Introduza a data final (0 para cancelar)"); DesenharDivisoria(); AlinharInput();
                 read = Console.ReadLine();
-                if (read == "0") break;
+                if (read == "0") return;
                 else if (DateTime.TryParse(read, out dataFim))
                 {
                     if (dataInicio.CompareTo(DateTime.MinValue) > 0 && dataFim.CompareTo(dataInicio) >= 0)
@@ -1010,7 +1010,22 @@ namespace RentACar
                 }
                 else MensagemErro("Inválido");
             } while (true);
-            
+            double soma = 0;
+            foreach (Reserva reserva in empresa.Reservas)
+            {
+                if(reserva.IdCliente != 1337 && dataInicio.CompareTo(reserva.DataFim) <= 0 && reserva.DataInicio.CompareTo(dataFim) <= 0)
+                {
+                    int cnt = 0; 
+                    DateTime dataComp = new DateTime(); dataComp = DateTime.Parse(dataInicio.ToShortDateString());
+                    while(dataComp.Date.CompareTo(reserva.DataInicio.Date) < 0) { dataComp = dataComp.AddDays(1); }
+                    while(dataComp.Date.CompareTo(dataFim.Date) <= 0 && dataComp.Date.CompareTo(reserva.DataFim.Date) <= 0) { cnt++; dataComp = dataComp.AddDays(1); }
+                    soma += cnt * (empresa.Veiculos.Where(veiculo => veiculo.Id == reserva.IdVeiculo).First().Preco);
+                }
+            }
+            Console.Clear(); DesenharTitulo("Ganhos Totais"); DesenharLinha("Data inicial: " + dataInicio.ToShortDateString()); DesenharLinha("Data final: " + dataFim.ToShortDateString());
+            if (soma > 0) { DesenharTitulo($"{soma.ToString(".00")} €"); }
+            else { DesenharTitulo("Sem reservas no periodo de tempo selecionado!"); }
+            Console.ReadKey();
         }
         static void ConsultarClientes(List<Cliente> clientes)
         {
@@ -1030,6 +1045,15 @@ namespace RentACar
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Empresa empresa = new Empresa();
+
+            empresa.AdicionarReserva(DateTime.Now.AddDays(10), DateTime.Now.AddDays(12), "TESTE RESERVAS", 1337, 1);
+            empresa.AdicionarReserva(DateTime.Now.AddDays(9), DateTime.Now.AddDays(12), "TESTE RESERVAS", 1337, 1);
+            empresa.AdicionarReserva(DateTime.Now.AddDays(10), DateTime.Now.AddDays(13), "TESTE RESERVAS", 1337, 1);
+            empresa.AdicionarReserva(DateTime.Now.AddDays(9), DateTime.Now.AddDays(13), "TESTE RESERVAS", 1337, 1);
+            empresa.AdicionarReserva(DateTime.Now.AddDays(11), DateTime.Now.AddDays(11), "TESTE RESERVAS", 1337, 1);
+            empresa.AdicionarReserva(DateTime.Now.AddDays(11), DateTime.Now.AddDays(15), "TESTE RESERVAS", 1337, 1);
+            empresa.AdicionarReserva(DateTime.Now.AddDays(13), DateTime.Now.AddDays(15), "TESTE RESERVAS", 1337, 1);
+
             bool loop = true;
             do
             {
