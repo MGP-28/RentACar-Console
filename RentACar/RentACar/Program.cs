@@ -896,7 +896,11 @@ namespace RentACar
                                 Console.Clear(); DesenharTitulo("Introduza a data de fim (0 para cancelar)"); AlinharInput();
                                 string read = Console.ReadLine();
                                 if (read == "0") break;
-                                else if (DateTime.TryParse(read, out dataFim)) { hasParameters = true; break; }
+                                else if (DateTime.TryParse(read, out dataFim)) { 
+                                    if(dataInicio.CompareTo(DateTime.MinValue) > 0 && dataFim.CompareTo(dataInicio) >= 0)
+                                    { hasParameters = true; break; }
+                                    else { MensagemErro("Data final não pode ser menor à inicial"); }
+                                }
                                 else MensagemErro("Inválido");
                             } while (true);
                             break;
@@ -982,7 +986,31 @@ namespace RentACar
         }
         static void ConsultarGanhos(ref Empresa empresa)
         {
-
+            string read;
+            DateTime dataInicio = new DateTime(), dataFim = new DateTime();
+            do {
+                Console.Clear(); DesenharTitulo("Consultar Ganhos");
+                DesenharLinha("Introduza a data inicial (0 para cancelar)"); DesenharDivisoria(); AlinharInput();
+                read = Console.ReadLine();
+                if (read == "0") break;
+                else if (DateTime.TryParse(read, out dataInicio)) { break; }
+                else MensagemErro("Inválido");
+            } while (true);
+            do
+            {
+                Console.Clear(); DesenharTitulo("Consultar Ganhos"); DesenharLinha("Data incial: " + dataInicio.ToShortDateString());
+                DesenharLinha("Introduza a data final (0 para cancelar)"); DesenharDivisoria(); AlinharInput();
+                read = Console.ReadLine();
+                if (read == "0") break;
+                else if (DateTime.TryParse(read, out dataFim))
+                {
+                    if (dataInicio.CompareTo(DateTime.MinValue) > 0 && dataFim.CompareTo(dataInicio) >= 0)
+                    { break; }
+                    else { MensagemErro("Data final não pode ser menor à inicial"); }
+                }
+                else MensagemErro("Inválido");
+            } while (true);
+            
         }
         static void ConsultarClientes(List<Cliente> clientes)
         {
