@@ -741,32 +741,13 @@ namespace RentACar
         }
         static List<Reserva> ProcurarReservas(List<Reserva> reservas, int idCliente, int idVeiculo, DateTime dataInicio, DateTime dataFim)
         {
-            List<Reserva> encontrados = new List<Reserva>();
-            if(idCliente != -1 && idVeiculo != -1) //iCliente + idVeiculo
+            List<Reserva> encontrados = new List<Reserva>(reservas);
+            foreach (Reserva reserva in encontrados)
             {
-                foreach (Reserva reserva in reservas)
-                {
-                    if (reserva.IdCliente == idCliente && reserva.IdVeiculo == idVeiculo) { encontrados.Add(reserva); }
-                }
+                if (idCliente != -1 && reserva.IdCliente != idCliente) { encontrados.Remove(reserva); continue; }
+                if (idVeiculo != -1 && reserva.IdVeiculo != idVeiculo) { encontrados.Remove(reserva); continue; }
             }
-            if (idCliente == -1 && idVeiculo != -1) //idVeiculo
-            {
-                foreach (Reserva reserva in reservas)
-                {
-                    if (reserva.IdVeiculo == idVeiculo) { encontrados.Add(reserva); }
-                }
-            }
-            else if(idCliente != -1 && idVeiculo == -1) //idCliente
-            {
-                foreach (Reserva reserva in reservas)
-                {
-                    if (reserva.IdCliente == idCliente) { encontrados.Add(reserva); }
-                }
-            } //nenhum dos dois: não executa, passa para verificar datas
-            if(dataInicio.CompareTo(DateTime.MinValue) != 0)
-            {
-                encontrados = VerificarDisponiveis(dataInicio, dataFim, encontrados);
-            }
+            encontrados = VerificarDisponiveis(dataInicio, dataFim, encontrados);
             return encontrados;
         }
         static void VerReservas(List<Reserva> reservas, bool nums)
@@ -789,10 +770,10 @@ namespace RentACar
             }
             DesenharDivisoria();
         }
-        static void ReservaProcura(ref Empresa empresa)
+        static Reserva ReservaProcura(ref Empresa empresa) 
         {
             int idCliente = -1, idVeiculo = -1; bool hasParameters = false, loop = true;
-            DateTime dataInicio = new DateTime(), dataFim = new DateTime();
+            DateTime dataInicio = new DateTime(), dataFim = new DateTime(); List<Reserva> encontrados = new List<Reserva>();
             do
             {
                 Console.Clear(); List<string> s = new List<string>();
@@ -821,7 +802,7 @@ namespace RentACar
                 } while (key < '0' || key > '5' && key != '9');
                 switch (key)
                 {
-                    case '0': return;
+                    case '0': return new Reserva();
                     case '1':
                         {
                             do
@@ -917,25 +898,40 @@ namespace RentACar
                             }
                             do
                             {
-                                if (isGeral) { Console.Clear(); DesenharTitulo("Procura total"); VerReservas(empresa.Reservas, true); }
-                                else { VerInformacaoInserida(s); List<Reserva> encontrados = ProcurarReservas(empresa.Reservas, idCliente, idVeiculo, dataInicio, dataFim); VerReservas(encontrados, true); }
+                                Console.Clear();
+                                if (isGeral) { DesenharTitulo("Procura total"); VerReservas(empresa.Reservas, true); }
+                                else { VerInformacaoInserida(s); encontrados = ProcurarReservas(empresa.Reservas, idCliente, idVeiculo, dataInicio, dataFim); VerReservas(encontrados, true); }
                                 DesenharTitulo("* para listagem de clientes, - para listagem de veículos, 0 para sair");
-                                char keyVerReservas = Console.ReadKey(true).KeyChar;
-                                switch (keyVerReservas)
+                                string stringVerReservas = Console.ReadLine();
+                                switch (stringVerReservas)
                                 {
-                                    case '*':
+                                    case "*":
                                         {
-                                            { ConsultarClientes(empresa.Clientes); break; }
+                                            { Console.Clear(); ConsultarClientes(empresa.Clientes); break; }
                                         }
-                                    case '-':
+                                    case "-":
                                         { Console.Clear(); VerTodosVeiculos(empresa.Veiculos); Console.ReadKey(); break; }
-                                    case '0': { loop = false; break; }
+                                    case "0": { loop = false; break; }
+                                    default:
+                                        {
+                                            int numTemp;
+                                            if (int.TryParse(stringVerReservas, out numTemp) && VerifNum(numTemp, 1, encontrados.Count)) { loop = false; num = numTemp - 1; }
+                                            else { MensagemErro("Inválido"); }
+                                            break;
+                                        }
                                 }
                             } while (loop);
                             break;
                         }
                 }
             } while (loop);
+            return encontrados;
+        }
+        static void AlterarReserva(ref Empresa empresa)
+        {
+            int indexReserva;
+            List<Reserva> = ReservaProcura(ref empresa, out indexReserva);
+
         }
         static void ExportarHTML(List<Veiculo> veiculos)
         {
@@ -1071,9 +1067,9 @@ namespace RentACar
                     case '1':
                         { SimularReserva(ref empresa); break; }
                     case '2':
-                        { /*AlterarReserva(ref empresa);*/ break; }
+                        { AlterarReserva(ref empresa); break; }
                     case '3':
-                        { ReservaProcura(ref empresa); break; }
+                        { ReservaProcura(ref empresa, out _); break; }
                     case '4': //Ver veículos disponíveis no momento
                         {
                             int classeVeiculo = InserirTipoVeiculo(); if (classeVeiculo == 0) return;
