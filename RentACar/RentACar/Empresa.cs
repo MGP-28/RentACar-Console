@@ -11,6 +11,7 @@ namespace RentACar
     {
         private int _idVeiculo = 0;
         private int _idCliente = 0;
+        private int _idReserva = 0;
         private List<Cliente> _Clientes = new List<Cliente>();
         private List<string> _combustiveis = new List<string>()
         {
@@ -26,6 +27,7 @@ namespace RentACar
         internal List<Veiculo> Veiculos { get => _veiculos; set => _veiculos = value; }
         private int IdVeiculo { get => _idVeiculo; set => _idVeiculo = value; }
         private int IdCliente { get => _idCliente; set => _idCliente = value; }
+        private int IdReserva { get => _idReserva; set => _idReserva = value; }
         internal List<Cliente> Clientes { get => _Clientes; set => _Clientes = value; }
         internal List<Reserva> Reservas { get => _reservas; set => _reservas = value; }
         public Empresa()
@@ -123,7 +125,8 @@ namespace RentACar
         }
         public void AdicionarReserva(DateTime dataInicio, DateTime dataFim, string finalidade, int id, int idVeiculo)
         {
-            Reserva r = new Reserva(dataInicio, dataFim, finalidade, id, idVeiculo);
+            IdReserva++;
+            Reserva r = new Reserva(dataInicio, dataFim, finalidade, id, idVeiculo, IdReserva);
             Reservas.Add(r);
         }
         public List<Reserva> ListagemReservas()
