@@ -61,77 +61,50 @@ namespace RentACar
             file.Add("");
             read.Close();
             int cnt = 0;
-            string searchClass = " Carro ";
             foreach (string line in file)
             {
-                if (line != "")
+                string name = line.Substring(line.IndexOf("«") +1, (line.IndexOf("»") - line.IndexOf("«")) -1);
+                line.Replace($"«{name}» ", "");
+                string[] split = line.Split(' '); //Elimina texto da classe e separa nome do veiculo do restante
+                Veiculo v = new Veiculo(GetNextIdVeiculo());
+                v.Nome = name.ToString(); //nome
+                v.Cor = split[2];
+                v.Combustivel = split[3];
+                v.Preco = double.Parse(split[4]);
+                switch (split[0])
                 {
-                    Veiculo v = new Veiculo(GetNextIdVeiculo());
-                    string line1 = line.Replace(searchClass, "!");
-                    string[] split = line1.Split('!');
-                    v.Nome = split[0].ToString();
-                    string[] data = split[1].Split(' ');
-                    v.Cor = data[0];
-                    v.Combustivel = data[1];
-                    data[2] = data[2].Replace("€", "");
-                    v.Preco = double.Parse(data[2]);
-                    switch (cnt)
-                    {
-                        case 0:
-                            {
-                                Carro c = new Carro(v);
-                                c.NPortas = int.Parse(data[3]);
-                                c.Caixa = data[4];
-                                Veiculos.Add(c);
-                                break;
-                            }
-                        case 1:
-                            {
-                                Mota c = new Mota(v);
-                                data[3] = data[3].Replace("cc", "");
-                                c.Cilindrada = int.Parse(data[3]);
-                                Veiculos.Add(c);
-                                break;
-                            }
-                        case 2:
-                            {
-                                Camioneta c = new Camioneta(v);
-                                c.NEixos = int.Parse(data[3]);
-                                c.NPassageiros = int.Parse(data[4]);
-                                Veiculos.Add(c);
-                                break;
-                            }
-                        case 3:
-                            {
-                                Camiao c = new Camiao(v);
-                                data[3] = data[3].Replace("kg", "");
-                                c.PesoMax = double.Parse(data[3]);
-                                Veiculos.Add(c);
-                                break;
-                            }
-                    }
-                }
-                else
-                {
-                    cnt++;
-                    switch (cnt)
-                    {
-                        case 1: searchClass = " Mota "; break;
-                        case 2: searchClass = " Camioneta "; break;
-                        case 3: searchClass = " Camião "; break;
-                    }
+                    case "Carro":
+                        {
+                            Carro c = new Carro(v);
+                            c.NPortas = int.Parse(split[5]);
+                            c.Caixa = split[6];
+                            Veiculos.Add(c);
+                            break;
+                        }
+                    case "Mota":
+                        {
+                            Mota c = new Mota(v);
+                            c.Cilindrada = int.Parse(split[5]);
+                            Veiculos.Add(c);
+                            break;
+                        }
+                    case "Camioneta":
+                        {
+                            Camioneta c = new Camioneta(v);
+                            c.NEixos = int.Parse(split[5]);
+                            c.NPassageiros = int.Parse(split[6]);
+                            Veiculos.Add(c);
+                            break;
+                        }
+                    case "Camiao":
+                        {
+                            Camiao c = new Camiao(v);
+                            c.PesoMax = double.Parse(split[5]);
+                            Veiculos.Add(c);
+                            break;
+                        }
                 }
             }
-        }
-        public void AdicionarReserva(DateTime dataInicio, DateTime dataFim, string finalidade, int id, int idVeiculo)
-        {
-            IdReserva++;
-            Reserva r = new Reserva(dataInicio, dataFim, finalidade, id, idVeiculo, IdReserva);
-            Reservas.Add(r);
-        }
-        public List<Reserva> ListagemReservas()
-        {
-            return Reservas;
         }
         public void SimularAvarias(DateTime inicio)
         {
@@ -185,6 +158,16 @@ namespace RentACar
         {
             Cliente c = new Cliente(nome, GetNextClientId());
             Clientes.Add(c);
+        }
+        public void AdicionarReserva(DateTime dataInicio, DateTime dataFim, string finalidade, int id, int idVeiculo)
+        {
+            IdReserva++;
+            Reserva r = new Reserva(dataInicio, dataFim, finalidade, id, idVeiculo, IdReserva);
+            Reservas.Add(r);
+        }
+        public List<Reserva> ListagemReservas()
+        {
+            return Reservas;
         }
     }
 }

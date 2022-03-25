@@ -55,5 +55,9 @@ namespace RentACar
             if (Finalidade.Length > Console.WindowWidth - 64) { finalidade = Finalidade.Remove(0, Console.WindowWidth - 64); }
             return $"{DataInicio.ToShortDateString().PadRight(11)} | {DataFim.ToShortDateString().PadRight(11)} | {IdCliente.ToString().PadRight(10)} | {IdVeiculo.ToString().PadRight(10)} | {finalidade}";
         }
+        public void ToStringDoc()
+        {
+
+        }
     }
 }

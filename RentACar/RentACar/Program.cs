@@ -128,30 +128,6 @@ namespace RentACar
             DesenharLinha("Combustível: " + combustivel);
             DesenharLinha("Preço: " + preco.ToString(".00") + " €");
         }
-        static bool ConfirmacaoReserva(Veiculo viatura, DateTime inico, DateTime fim, Cliente cliente)
-        {
-            do
-            {
-                string tipo = (viatura.GetType()).ToString().Replace("RentACar.", "");
-                Console.Clear();
-                DesenharDivisoria();
-                DesenharLinha("Nome: " + cliente.Nome);
-                DesenharLinha("ID Cliente: " + cliente.Id);
-                DesenharLinha("Inicio: " + inico.ToShortDateString());
-                DesenharLinha("Fim: " + fim.ToShortDateString());
-                DesenharLinha("Tipo: " + tipo);
-                DesenharLinha("Marca/Modelo: " + viatura.Nome);
-                DesenharLinha("Cor: " + viatura.Cor);
-                DesenharLinha("Combustível: " + viatura.Combustivel);
-                DesenharLinha("Preço: " + viatura.Preco.ToString(".00") + " €");
-                DesenharTitulo("Pretende confirmar a reserva? (Sim / Nao)");
-                AlinharInput();
-                string confirmacao = Console.ReadLine();
-                if (confirmacao == "Nao") return false;
-                else if (confirmacao != "Sim") { MensagemErro("Introduza 'Sim' ou 'Nao' !"); }
-                else return true;
-            } while(true);
-        }
         static int InserirTipoVeiculo()
         {
             char op;
@@ -491,28 +467,17 @@ namespace RentACar
             }
             return veiculos;
         }
-        static List<Veiculo> VerificarDisponiveis(DateTime dataInicio, DateTime dataFim, List<Veiculo> veiculos, List<Reserva> reservas)
+        static List<Veiculo> VerificarDisponiveisIntervalo(DateTime dataInicio, DateTime dataFim, List<Veiculo> veiculos, List<Reserva> reservas)
         {
             List<Veiculo> veiculosDisponiveis = new List<Veiculo>(veiculos);
-            if (dataInicio.CompareTo(DateTime.MinValue) != 0)
+            foreach (Reserva reserva in reservas)
             {
-                foreach (Reserva reserva in reservas)
-                {
-                    if (reserva.DataInicio.Date.CompareTo(dataInicio.Date) != 0)
-                    { veiculosDisponiveis.Remove(VerificarVeiculo(veiculos, reserva.IdVeiculo)); }
-                }
-            }
-            if (dataFim.CompareTo(DateTime.MinValue) != 0)
-            {
-                foreach (Reserva reserva in reservas)
-                {
-                    if (reserva.DataFim.Date.CompareTo(dataFim.Date) != 0)
-                    { veiculosDisponiveis.Remove(VerificarVeiculo(veiculos, reserva.IdVeiculo)); }
-                }
+                if(VerifIntersDate(reserva.DataInicio,reserva.DataFim,dataInicio,dataFim))
+                { veiculosDisponiveis.Remove(VerificarVeiculo(veiculos, reserva.IdVeiculo)); }
             }
             return veiculosDisponiveis;
         }
-        static List<Reserva> VerificarDisponiveis(DateTime dataInicio, DateTime dataFim, List<Reserva> reservas)
+        static List<Reserva> VerificarDisponiveisDataExata(DateTime dataInicio, DateTime dataFim, List<Reserva> reservas)
         {
             List <Reserva> encontrados = new List<Reserva>(reservas);
             if (dataInicio.CompareTo(DateTime.MinValue) != 0)
@@ -664,6 +629,31 @@ namespace RentACar
             }
             DesenharDivisoria();
         }
+        static bool ConfirmacaoReserva(Veiculo viatura, DateTime inicio, DateTime fim, Cliente cliente)
+        {
+            do
+            {
+                string tipo = (viatura.GetType()).ToString().Replace("RentACar.", "");
+                Console.Clear();
+                DesenharDivisoria();
+                DesenharLinha("Nome: " + cliente.Nome);
+                DesenharLinha("ID Cliente: " + cliente.Id);
+                DesenharLinha("Inicio: " + inicio.ToShortDateString());
+                DesenharLinha("Fim: " + fim.ToShortDateString());
+                DesenharLinha("Tipo: " + tipo);
+                DesenharLinha("Marca/Modelo: " + viatura.Nome);
+                DesenharLinha("Cor: " + viatura.Cor);
+                DesenharLinha("Combustível: " + viatura.Combustivel);
+                DesenharLinha("Preço: " + viatura.Preco.ToString(".00") + " €");
+                DesenharLinha("Total: " + ((viatura.Preco)*(fim.CompareTo(inicio)+1)).ToString(".00") + " €");
+                DesenharTitulo("Pretende confirmar a reserva? (Sim / Nao)");
+                AlinharInput();
+                string confirmacao = Console.ReadLine();
+                if (confirmacao == "Nao") return false;
+                else if (confirmacao != "Sim") { MensagemErro("Introduza 'Sim' ou 'Nao' !"); }
+                else return true;
+            } while (true);
+        }
         static void SimularReserva(ref Empresa empresa)
         {
             DateTime dataInicio = new DateTime();
@@ -714,7 +704,7 @@ namespace RentACar
                     do
                     {
                         Console.Clear(); DesenharTitulo($"Inicio: {dataInicio.ToShortDateString()} | Fim: {dataFim.ToShortDateString()}");
-                        disponiveis = VerificarDisponiveis(dataInicio, dataFim, veiculos, empresa.Reservas);
+                        disponiveis = VerificarDisponiveisIntervalo(dataInicio, dataFim, veiculos, empresa.Reservas);
                         VerVeiculosDisponiveis(disponiveis, tipoVeiculo, false); DesenharLinha("Introduza o número correspondente à viatura para continuar (N/B para avançar/recuar um dia, 0 para cancelar)"); DesenharDivisoria(); AlinharInput(); 
                         s = Console.ReadLine();
                         if (s == "N" || s == "n") { dataInicio = dataInicio.AddDays(1); dataFim = dataFim.AddDays(1); }
@@ -768,7 +758,7 @@ namespace RentACar
                 if (idCliente != -1 && reserva.IdCliente != idCliente) { encontrados.Remove(reserva); continue; }
                 if (idVeiculo != -1 && reserva.IdVeiculo != idVeiculo) { encontrados.Remove(reserva); continue; }
             }
-            encontrados = VerificarDisponiveis(dataInicio, dataFim, encontrados);
+            encontrados = VerificarDisponiveisDataExata(dataInicio, dataFim, encontrados);
             return encontrados;
         }
         static void VerReservas(List<Reserva> reservas, bool nums)
@@ -1062,8 +1052,7 @@ namespace RentACar
                 if (read == "0") return;
                 else if (DateTime.TryParse(read, out dataFim))
                 {
-                    if (dataInicio.CompareTo(DateTime.MinValue) > 0 && dataFim.CompareTo(dataInicio) >= 0)
-                    { break; }
+                    if (dataInicio.CompareTo(DateTime.MinValue) > 0 && dataFim.CompareTo(dataInicio) >= 0) { break; }
                     else { MensagemErro("Data final não pode ser menor à inicial"); }
                 }
                 else MensagemErro("Inválido");
@@ -1104,13 +1093,13 @@ namespace RentACar
             Console.ForegroundColor = ConsoleColor.Yellow;
             Empresa empresa = new Empresa();
 
-            empresa.AdicionarReserva(DateTime.Now.AddDays(10), DateTime.Now.AddDays(12), "TESTE RESERVAS", 1337, 1);
-            empresa.AdicionarReserva(DateTime.Now.AddDays(9), DateTime.Now.AddDays(12), "TESTE RESERVAS", 1337, 1);
-            empresa.AdicionarReserva(DateTime.Now.AddDays(10), DateTime.Now.AddDays(13), "TESTE RESERVAS", 1337, 1);
-            empresa.AdicionarReserva(DateTime.Now.AddDays(9), DateTime.Now.AddDays(13), "TESTE RESERVAS", 1337, 1);
-            empresa.AdicionarReserva(DateTime.Now.AddDays(11), DateTime.Now.AddDays(11), "TESTE RESERVAS", 1337, 1);
-            empresa.AdicionarReserva(DateTime.Now.AddDays(11), DateTime.Now.AddDays(15), "TESTE RESERVAS", 1337, 1);
-            empresa.AdicionarReserva(DateTime.Now.AddDays(13), DateTime.Now.AddDays(15), "TESTE RESERVAS", 1337, 1);
+            empresa.AdicionarReserva(DateTime.Now.AddDays(10), DateTime.Now.AddDays(12), "TESTE RESERVAS", 2, 1);
+            empresa.AdicionarReserva(DateTime.Now.AddDays(9), DateTime.Now.AddDays(12), "TESTE RESERVAS", 4, 2);
+            empresa.AdicionarReserva(DateTime.Now.AddDays(10), DateTime.Now.AddDays(13), "TESTE RESERVAS", 6, 3);
+            empresa.AdicionarReserva(DateTime.Now.AddDays(9), DateTime.Now.AddDays(13), "TESTE RESERVAS", 8, 4);
+            empresa.AdicionarReserva(DateTime.Now.AddDays(11), DateTime.Now.AddDays(11), "TESTE RESERVAS", 10, 5);
+            empresa.AdicionarReserva(DateTime.Now.AddDays(11), DateTime.Now.AddDays(15), "TESTE RESERVAS", 12, 6);
+            empresa.AdicionarReserva(DateTime.Now.AddDays(13), DateTime.Now.AddDays(15), "TESTE RESERVAS", 14, 7);
 
             bool loop = true;
             do
