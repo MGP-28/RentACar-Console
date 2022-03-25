@@ -516,7 +516,7 @@ namespace RentACar
         }
         static void VerVeiculosDisponiveis(List<Veiculo> veiculos, int op, bool isHoje)
         {
-            string titulos = $"{"ID".PadLeft(3)} | {"Nome".PadRight(14)} | {"Cor".PadRight(8)} | { "Combustivel".PadRight(8)} | { "Preco €"}";
+            string titulos = $"{"ID".PadLeft(3)} | {"Nome".PadRight(18)} | {"Cor".PadRight(8)} | { "Combustivel".PadRight(8)} | { "Preco €"}";
             string apendice = "";
             if(isHoje) apendice = " disponíveis no presente dia";
             switch (op)
@@ -582,7 +582,7 @@ namespace RentACar
             List<Veiculo> veiculos = VerificarManutencao(DateTime.Now, empresa.Veiculos, empresa.Reservas, ref motivos, ref fimManutencao);
             Console.Clear();
             DesenharTitulo("Veiculos em manutenção");
-            DesenharLinha($"{"Tipo".PadRight(9)} | {"ID".PadLeft(4)} | { "Nome".PadRight(14)} | {"Cor".PadRight(8)} | { "Combustivel".PadRight(8)} | { "Preco €"} | Data final | Motivo");
+            DesenharLinha($"{"Tipo".PadRight(9)} | {"ID".PadLeft(4)} | { "Nome".PadRight(18)} | {"Cor".PadRight(8)} | { "Combustivel".PadRight(8)} | { "Preco €"} | Data final | Motivo");
             DesenharDivisoria();
             for (int i = 0; i < veiculos.Count; i++)
             {
@@ -1092,15 +1092,6 @@ namespace RentACar
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Empresa empresa = new Empresa();
-
-            empresa.AdicionarReserva(DateTime.Now.AddDays(10), DateTime.Now.AddDays(12), "TESTE RESERVAS", 2, 1);
-            empresa.AdicionarReserva(DateTime.Now.AddDays(9), DateTime.Now.AddDays(12), "TESTE RESERVAS", 4, 2);
-            empresa.AdicionarReserva(DateTime.Now.AddDays(10), DateTime.Now.AddDays(13), "TESTE RESERVAS", 6, 3);
-            empresa.AdicionarReserva(DateTime.Now.AddDays(9), DateTime.Now.AddDays(13), "TESTE RESERVAS", 8, 4);
-            empresa.AdicionarReserva(DateTime.Now.AddDays(11), DateTime.Now.AddDays(11), "TESTE RESERVAS", 10, 5);
-            empresa.AdicionarReserva(DateTime.Now.AddDays(11), DateTime.Now.AddDays(15), "TESTE RESERVAS", 12, 6);
-            empresa.AdicionarReserva(DateTime.Now.AddDays(13), DateTime.Now.AddDays(15), "TESTE RESERVAS", 14, 7);
-
             bool loop = true;
             do
             {
@@ -1138,6 +1129,7 @@ namespace RentACar
                         { ExportarHTML(empresa.Veiculos); break; }
                 }
             } while (loop);
+            empresa.DataToFiles();
         }
     }
 }

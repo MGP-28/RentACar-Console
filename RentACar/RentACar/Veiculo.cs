@@ -41,11 +41,15 @@ namespace RentACar
         }
         public override string ToString()
         {
-            return $"{Nome.PadRight(14)} | {Cor.PadRight(8)} | {Combustivel.PadRight(11)} | {Preco.ToString(".00").PadLeft(7)}";
+            return $"{Nome.PadRight(18)} | {Cor.PadRight(8)} | {Combustivel.PadRight(11)} | {Preco.ToString(".00").PadLeft(7)}";
         }
         public string ToStringHTMLbase()
         {
             return $"<th>{Nome}</th><th>{Cor}</th><th>{Combustivel}</th><th>{Preco.ToString(".00")}</th>";
+        }
+        public virtual string ToStringToFile()
+        {
+            return $"«{Nome}» {Id} {Cor} {Combustivel} {Preco.ToString(".00")}";
         }
     }
 }

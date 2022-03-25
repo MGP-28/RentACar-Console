@@ -29,5 +29,9 @@ namespace RentACar
         {
             return base.ToStringHTMLbase() + $"<th>{NPortas}</th><th>{Caixa}</th>";
         }
+        public override string ToStringToFile()
+        {
+            return $"Carro {base.ToStringToFile()} {NPortas} {Caixa}";
+        }
     }
 }

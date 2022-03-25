@@ -48,26 +48,25 @@ namespace RentACar
         {
             BuildClientes();
             BuildCarros();
+            BuildReservas();
             SimularAvarias(DateTime.Now);
         }
-        public void BuildCarros()
+        private void BuildCarros()
         {
-            StreamReader read = new StreamReader(@"base.txt");
+            StreamReader read = new StreamReader(@"ficheiros/veiculos.txt");
             List<string> file = new List<string>();
             while (!read.EndOfStream)
             {
                 file.Add(read.ReadLine());
             }
-            file.Add("");
             read.Close();
-            int cnt = 0;
             foreach (string line in file)
             {
                 string name = line.Substring(line.IndexOf("«") +1, (line.IndexOf("»") - line.IndexOf("«")) -1); // posiçao de « e intervalo entre « e »
-                line.Replace($"«{name}» ", "");
-                string[] split = line.Split(' '); //Elimina texto da classe e separa nome do veiculo do restante
+                string[] split = line.Replace($"«{name}» ", "").Split(' '); //Elimina texto da classe e separa nome do veiculo do restante
                 Veiculo v = new Veiculo(GetNextIdVeiculo());
                 v.Nome = name.ToString(); //nome
+                v.Id = int.Parse(split[1]);
                 v.Cor = split[2];
                 v.Combustivel = split[3];
                 v.Preco = double.Parse(split[4]);
@@ -108,6 +107,10 @@ namespace RentACar
         }
         public void SimularAvarias(DateTime inicio)
         {
+            foreach (Reserva reserva in Reservas)
+            {
+                if (reserva.DataInicio.Date == DateTime.Now.Date && reserva.Finalidade == "Limpeza") { return; }
+            }
             Random random = new Random();
             List<string> avarias = new List<string>
             {
@@ -130,11 +133,25 @@ namespace RentACar
                 }
             }
         }
-        public void BuildClientes()
+        private void BuildClientes()
         {
+            StreamReader read = new StreamReader(@"ficheiros/clientes.txt");
+            List<string> file = new List<string>();
             Cliente c = new Cliente("Referencia_Interna", 1337);
             Clientes.Add(c);
-            StreamReader read = new StreamReader(@"nomes.txt");
+            while (!read.EndOfStream)
+            {
+                file.Add(read.ReadLine());
+            }
+            read.Close();
+            file.RemoveAt(0);
+            foreach (string line in file)
+            {
+                string[] split = line.Split('#');
+                c = new Cliente(split[1], int.Parse(split[0]));
+                Clientes.Add(c); IdCliente = c.Id;
+            }
+            read = new StreamReader(@"ficheiros/nomes.txt"); //20 novos clientes aleatorios
             List<string> nomes = new List<string>();
             List<string> apelidos = new List<string>();
             while (true)
@@ -154,6 +171,31 @@ namespace RentACar
                 AddCliente(nome);
             }
         }
+        private void BuildReservas()
+        {
+            StreamReader read = new StreamReader(@"ficheiros/reservas.txt");
+            List<string> file = new List<string>();
+            while (!read.EndOfStream)
+            {
+                file.Add(read.ReadLine());
+            }
+            read.Close();
+            foreach (string line in file)
+            {
+                DateTime inicio = new DateTime(); DateTime fim = new DateTime();
+                string finalidade = line.Substring(line.IndexOf("«") + 1, (line.IndexOf("»") - line.IndexOf("«")) - 1);
+                string[] split = line.Replace($"«{finalidade}»", "").Split(' ');
+                if (!DateTime.TryParse(split[3], out inicio)) { //data inicio
+                    string[] date = split[3].Split('/'); string hold = date[0]; date[0] = date[1]; date[1] = hold; //switch day/month
+                    DateTime.TryParse($"{int.Parse(date[0])}/{int.Parse(date[1])}/{int.Parse(date[2])}", out inicio); } //try again
+                if (!DateTime.TryParse(split[4], out fim)) { //data fim
+                    string[] date = split[4].Split('/'); string hold = date[0]; date[0] = date[1]; date[1] = hold; //switch day/month
+                    DateTime.TryParse($"{int.Parse(date[0])}/{int.Parse(date[1])}/{int.Parse(date[2])}", out fim);
+                }
+                Reserva r = new Reserva(inicio, fim, finalidade, int.Parse(split[2]), int.Parse(split[1]), int.Parse(split[0]));
+                Reservas.Add(r);
+            }
+        }
         public void AddCliente(string nome)
         {
             Cliente c = new Cliente(nome, GetNextClientId());
@@ -168,6 +210,27 @@ namespace RentACar
         public List<Reserva> ListagemReservas()
         {
             return Reservas;
+        }
+        public void DataToFiles()
+        {
+            StreamWriter write = new StreamWriter(@"ficheiros/veiculos.txt",false);
+            foreach (Veiculo veiculo in Veiculos)
+            {
+                write.WriteLine(veiculo.ToStringToFile());
+            }
+            write.Close();
+            write = new StreamWriter(@"ficheiros/reservas.txt", false);
+            foreach (Reserva reserva in Reservas)
+            {
+                write.WriteLine(reserva.ToStringToFile());
+            }
+            write.Close();
+            write = new StreamWriter(@"ficheiros/clientes.txt", false);
+            foreach (Cliente cliente in Clientes)
+            {
+                write.WriteLine(cliente.ToStringToFile());
+            }
+            write.Close();
         }
     }
 }

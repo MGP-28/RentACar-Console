@@ -20,7 +20,6 @@ namespace RentACar
         public int IdCliente { get => _idCliente; set => _idCliente = value; }
         public int IdVeiculo { get => _idVeiculo; set => _idVeiculo = value; }
         public int IdReserva { get => _idReserva; set => _idReserva = value; }
-
         public Reserva()
         {
             DataInicio = DateTime.MinValue;
@@ -28,8 +27,7 @@ namespace RentACar
             Finalidade = "";
             IdCliente = -1;
             IdVeiculo = -1;
-            Random random = new Random();
-            IdReserva = random.Next(0, 100000000);
+            
         }
         public Reserva(Reserva reserva)
         {
@@ -55,9 +53,9 @@ namespace RentACar
             if (Finalidade.Length > Console.WindowWidth - 64) { finalidade = Finalidade.Remove(0, Console.WindowWidth - 64); }
             return $"{DataInicio.ToShortDateString().PadRight(11)} | {DataFim.ToShortDateString().PadRight(11)} | {IdCliente.ToString().PadRight(10)} | {IdVeiculo.ToString().PadRight(10)} | {finalidade}";
         }
-        public void ToStringDoc()
+        public string ToStringToFile() //idReserva, idVeiculo, idCliente, dataInicio, dataFim, «Finalidade»
         {
-
+            return $"{IdReserva} {IdVeiculo} {IdCliente} {DataInicio.ToShortDateString()} {DataFim.ToShortDateString()} «{Finalidade}»";
         }
     }
 }

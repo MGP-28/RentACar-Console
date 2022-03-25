@@ -1,0 +1,44 @@
+Carro «Audi A1» 1 Cinza Gasóleo 20.00 5 Manual
+Carro «Audi A1» 2 Preto Gasóleo 20.00 5 Manual
+Carro «Audi A1» 3 Branco Gasóleo 20.00 5 Manual
+Carro «BMW Serie 1» 4 Preto Gasolina 22.00 5 Manual
+Carro «BMW Serie 1» 5 Cinza Gasolina 22.00 5 Manual
+Carro «BMW Serie 2» 6 Preto Gasolina 24.00 5 Manual
+Carro «BMW Serie 2» 7 Cinza Gasolina 24.00 5 Manual
+Carro «Mazda CX-3» 8 Vermelho Gasóleo 18.00 5 Manual
+Carro «Mazda CX-3» 9 Vermelho Gasóleo 18.00 5 Manual
+Carro «Mazda CX-3» 10 Azul Gasóleo 18.00 5 Manual
+Carro «Mazda CX-3» 11 Azul Gasóleo 18.00 5 Manual
+Carro «Mazda CX-5» 12 Vermelho Gasóleo 20.00 5 Manual
+Carro «Mazda CX-5» 13 Vermelho Gasóleo 20.00 5 Manual
+Carro «Mazda CX-5» 14 Azul Gasóleo 20.00 5 Manual
+Carro «Porsche 911» 15 Cinza Gasolina 40.00 3 Automática
+Carro «Renault Clio» 16 Branco Gasóleo 12.00 3 Manual
+Carro «Renault Clio» 17 Branco Gasóleo 12.00 3 Manual
+Carro «Renault Clio» 18 Preto Gasolina 10.00 5 Manual
+Carro «Renault Clio» 19 Preto Gasolina 10.00 5 Manual
+Carro «Renault Megane» 20 Vermelho Gasóleo 16.00 5 Manual
+Carro «Renault Megane» 21 Azul Gasóleo 16.00 5 Manual
+Carro «Renault Megane» 22 Preto Gasóleo 16.00 5 Manual
+Carro «Renault Megane» 23 Cinza Gasóleo 16.00 5 Manual
+Carro «Renault Zoe» 24 Branco Elétrico 25.00 3 Automática
+Carro «Renault Zoe» 25 Branco Elétrico 25.00 3 Automática
+Carro «Renault Zoe» 26 Branco Elétrico 25.00 3 Automática
+Carro «Toyota CH-R» 27 Preto Híbrido 27.00 5 Automática
+Carro «Toyota CH-R» 28 Cinza Híbrido 27.00 5 Automática
+Carro «Toyota Prius» 29 Vermelho Híbrido 25.00 5 Automática
+Carro «Toyota Prius» 30 Vermelho Híbrido 25.00 5 Automática
+Carro «Toyota Prius» 31 Azul Híbrido 25.00 5 Automática
+Carro «Toyota Corolla» 32 Preto Gasolina 15.00 5 Manual
+Carro «Seat Leon» 33 Preto Gasóleo 17.00 3 Manual
+Carro «Seat Leon» 34 Preto Gasóleo 17.00 3 Manual
+Mota «Honda CBF» 35 Amarelo Gasolina 10.00 125
+Mota «Honda CBF» 36 Amarelo Gasolina 10.00 125
+Mota «Kawasaki ZRX» 37 Vermelho Gasolina 10.00 300
+Mota «Kawasaki ZRX» 38 Vermelho Gasolina 10.00 300
+Camioneta «Irizar PB» 39 Preto Gasóleo 100.00 3 150
+Camiao «MAN» 40 Preto Gasóleo 120.00 2000
+Camiao «Mercedes» 41 Preto Gasóleo 180.00 2500
+Camiao «Scania» 42 Preto Gasóleo 160.00 1750
+Carro «Honda Accord» 43 Azul GPL 20.00 4 Manual
+Mota «Honda CBR» 44 Vermelho Gasolina 20.00 600

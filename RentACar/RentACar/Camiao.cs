@@ -25,5 +25,9 @@ namespace RentACar
         {
             return base.ToStringHTMLbase() + $"<th>{PesoMax.ToString()}</th>";
         }
+        public override string ToStringToFile()
+        {
+            return $"Camiao {base.ToStringToFile()} {PesoMax}";
+        }
     }
 }

@@ -24,5 +24,9 @@ namespace RentACar
         {
             return $"{Id.ToString().PadLeft(4)} | {Nome}";
         }
+        public string ToStringToFile()
+        {
+            return $"{Id}#{Nome}";
+        }
     }
 }

@@ -25,5 +25,9 @@ namespace RentACar
         {
             return base.ToStringHTMLbase() + $"<th>{Cilindrada.ToString()}</th>";
         }
+        public override string ToStringToFile()
+        {
+            return $"Mota {base.ToStringToFile()} {Cilindrada}";
+        }
     }
 }
