@@ -63,7 +63,7 @@ namespace RentACar
             int cnt = 0;
             foreach (string line in file)
             {
-                string name = line.Substring(line.IndexOf("«") +1, (line.IndexOf("»") - line.IndexOf("«")) -1);
+                string name = line.Substring(line.IndexOf("«") +1, (line.IndexOf("»") - line.IndexOf("«")) -1); // posiçao de « e intervalo entre « e »
                 line.Replace($"«{name}» ", "");
                 string[] split = line.Split(' '); //Elimina texto da classe e separa nome do veiculo do restante
                 Veiculo v = new Veiculo(GetNextIdVeiculo());
